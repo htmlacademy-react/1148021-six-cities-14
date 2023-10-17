@@ -310,7 +310,7 @@ export default function OfferPage(): JSX.Element {
                     <button
                       className="reviews__submit form__submit button"
                       type="submit"
-                      disabled=""
+                      disabled
                     >
                       Submit
                     </button>
