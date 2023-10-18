@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 export type TPlaceCard = {
   bedrooms: number;
   city: TCity;
@@ -33,23 +35,31 @@ type THost = {
   id: number;
   isPro: boolean;
   name: string;
-  hj: number;
 };
 
 type TPlaceCardProps = {
   card: TPlaceCard;
+  section: 'cities' | 'favorites';
 };
 
-export default function PlaceCard({ card }: TPlaceCardProps): JSX.Element {
+export default function PlaceCard({
+  card,
+  section,
+}: TPlaceCardProps): React.ReactNode {
   return (
-    <article className="cities__card place-card">
+    <article className={classNames(`${section}__card`, 'place-card')}>
       {card.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
       {card.previewImage && (
-        <div className="cities__image-wrapper place-card__image-wrapper">
+        <div
+          className={classNames(
+            `${section}__image-wrapper`,
+            'place-card__image-wrapper'
+          )}
+        >
           <a href="#">
             <img
               className="place-card__image"
@@ -61,16 +71,18 @@ export default function PlaceCard({ card }: TPlaceCardProps): JSX.Element {
           </a>
         </div>
       )}
-      <div className="place-card__info">
+      <div className={classNames(`${section}__card-info`, 'place-card__info')}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">€{card.price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
           <button
-            className={`place-card__bookmark-button ${
-              card.isFavorite ? 'place-card__bookmark-button--active' : ''
-            } button`}
+            className={classNames(
+              'place-card__bookmark-button',
+              { 'place-card__bookmark-button--active': card.isFavorite },
+              'button'
+            )}
             type="button"
           >
             <svg className="place-card__bookmark-icon" width={18} height={19}>

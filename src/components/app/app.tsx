@@ -4,6 +4,6 @@ type AppProps = {
   offersCount: number;
 };
 
-export default function App({ offersCount }: AppProps): JSX.Element {
+export default function App({ offersCount }: AppProps): React.ReactNode {
   return <MainPage offersCount={offersCount} />;
 }
