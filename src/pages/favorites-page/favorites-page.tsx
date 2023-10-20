@@ -1,6 +1,8 @@
+import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
 import { Header } from '../../components/header/header';
 import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
+import { AppTitle } from '../../const';
 
 export default function FavoritesPage(): React.ReactNode {
   const cities = ['Paris', 'Cologne'];
@@ -60,6 +62,10 @@ export default function FavoritesPage(): React.ReactNode {
 
   return (
     <div className="page">
+      <Helmet>
+        <title>{AppTitle} - Favorites</title>
+      </Helmet>
+
       <Header />
 
       <main className="page__main page__main--favorites">

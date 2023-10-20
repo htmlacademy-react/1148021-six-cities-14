@@ -1,4 +1,6 @@
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 export type TPlaceCard = {
   bedrooms: number;
@@ -60,7 +62,7 @@ export default function PlaceCard({
             'place-card__image-wrapper'
           )}
         >
-          <a href="#">
+          <Link to={`${AppRoute.Offer}/${card.id}`}>
             <img
               className="place-card__image"
               src={card.previewImage}
@@ -68,7 +70,7 @@ export default function PlaceCard({
               height={200}
               alt="Place image"
             />
-          </a>
+          </Link>
         </div>
       )}
       <div className={classNames(`${section}__card-info`, 'place-card__info')}>
@@ -88,7 +90,9 @@ export default function PlaceCard({
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark" />
             </svg>
-            <span className="visually-hidden">To bookmarks</span>
+            <span className="visually-hidden">
+              {card.isFavorite ? 'In' : 'To'} bookmarks
+            </span>
           </button>
         </div>
         <div className="place-card__rating rating">
@@ -98,7 +102,7 @@ export default function PlaceCard({
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{card.title}</a>
+          <Link to={`${AppRoute.Offer}/${card.id}`}>{card.title}</Link>
         </h2>
         <p className="place-card__type">{card.type}</p>
       </div>
