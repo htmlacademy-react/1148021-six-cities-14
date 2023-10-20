@@ -1,8 +1,13 @@
+import { Helmet } from 'react-helmet-async';
 import LogoLink from '../../components/logo-link/logo-link';
+import { AppTitle } from '../../const';
 
 export default function LoginPage(): React.ReactNode {
   return (
     <div className="page page--gray page--login">
+      <Helmet>
+        <title>{AppTitle} - Login</title>
+      </Helmet>
       <header className="header">
         <div className="container">
           <div className="header__wrapper">

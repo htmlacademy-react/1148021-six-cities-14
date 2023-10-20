@@ -1,26 +1,26 @@
 import classNames from 'classnames';
+import { NavLink } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
-type TLogoLinkProps = {
-  isActive?: boolean;
-};
-
-export default function LogoLink({
-  isActive = false,
-}: TLogoLinkProps): React.ReactNode {
+export default function LogoLink(): React.ReactNode {
   return (
-    <a
-      className={classNames('header__logo-link', {
-        'header__logo-link--active': isActive,
-      })}
-      href={!isActive ? '/' : undefined}
-    >
-      <img
-        className="header__logo"
-        src="img/logo.svg"
-        alt="6 cities logo"
-        width={81}
-        height={41}
-      />
-    </a>
+    <>
+      {/* prettier-ignore */}
+      <NavLink
+        className={({ isActive }) =>
+          classNames('header__logo-link', {
+            'header__logo-link--active': isActive,
+          })}
+        to={AppRoute.Main}
+      >
+        <img
+          className="header__logo"
+          src="img/logo.svg"
+          alt="6 cities logo"
+          width={81}
+          height={41}
+        />
+      </NavLink>
+    </>
   );
 }

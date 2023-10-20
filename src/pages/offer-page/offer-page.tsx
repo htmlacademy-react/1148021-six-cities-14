@@ -1,6 +1,9 @@
 import { Header } from '../../components/header/header';
 import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
 import Review from '../../components/review/review';
+import classNames from 'classnames';
+import { Helmet } from 'react-helmet-async';
+import { AppTitle } from '../../const';
 
 export default function OfferPage(): React.ReactNode {
   const images = [
@@ -43,9 +46,16 @@ export default function OfferPage(): React.ReactNode {
   const isPremium = true;
   const rating = 4;
   const price = 120;
+  const isFavorite = true;
+
+  //const { id } = useParams(); // todo
 
   return (
     <div className="page">
+      <Helmet>
+        <title>{AppTitle} - PlaceCard</title>
+      </Helmet>
+
       <Header />
 
       <main className="page__main page__main--offer">
@@ -75,11 +85,20 @@ export default function OfferPage(): React.ReactNode {
                 <h1 className="offer__name">
                   Beautiful &amp; luxurious studio at great location
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button
+                  className={classNames(
+                    'offer__bookmark-button',
+                    { 'offer__bookmark-button--active': isFavorite },
+                    'button'
+                  )}
+                  type="button"
+                >
                   <svg className="offer__bookmark-icon" width={31} height={33}>
                     <use xlinkHref="#icon-bookmark" />
                   </svg>
-                  <span className="visually-hidden">To bookmarks</span>
+                  <span className="visually-hidden">
+                    {isFavorite ? 'In' : 'To'} bookmarks
+                  </span>
                 </button>
               </div>
               <div className="offer__rating rating">

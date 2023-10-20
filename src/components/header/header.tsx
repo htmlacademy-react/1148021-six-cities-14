@@ -1,16 +1,12 @@
 import LogoLink from '../logo-link/logo-link';
 
-type THeaderProps = {
-  isActive?: boolean;
-};
-
-export function Header({ isActive = false }: THeaderProps): React.ReactNode {
+export function Header(): React.ReactNode {
   return (
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <LogoLink isActive={isActive} />
+            <LogoLink />
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">

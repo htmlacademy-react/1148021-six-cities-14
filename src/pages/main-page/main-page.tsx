@@ -42,7 +42,7 @@ export default function MainPage({
 
   return (
     <div className="page page--gray page--main">
-      <Header isActive />
+      <Header />
 
       <main
         className={`page__main page__main--index${
