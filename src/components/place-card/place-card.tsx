@@ -49,7 +49,10 @@ export default function PlaceCard({
   section,
 }: TPlaceCardProps): React.ReactNode {
   return (
-    <article className={classNames(`${section}__card`, 'place-card')}>
+    <article
+      className={classNames(`${section}__card`, 'place-card')}
+      data-card-id={card.id}
+    >
       {card.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
