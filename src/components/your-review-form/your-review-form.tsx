@@ -58,7 +58,6 @@ export default function YourReviewForm(): React.ReactNode {
               id={`${count}-stars`}
               type="radio"
               value={count}
-              checked={formData.rating === count || undefined}
               onChange={onFormFieldChange}
             />
             <label
