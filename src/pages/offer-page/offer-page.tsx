@@ -7,6 +7,7 @@ import { AppTitle } from '../../const';
 import YourReviewForm from '../../components/your-review-form/your-review-form';
 import { offers } from '../../mocks/offers';
 import { reviews } from '../../mocks/reviews';
+import StarsRating from '../../components/stars-rating/stars-rating';
 
 export default function OfferPage(): React.ReactNode {
   const images = [
@@ -93,15 +94,7 @@ export default function OfferPage(): React.ReactNode {
                   </span>
                 </button>
               </div>
-              <div className="offer__rating rating">
-                <div className="offer__stars rating__stars">
-                  <span style={{ width: `${(rating * 100) / 5}%` }} />
-                  <span className="visually-hidden">Rating</span>
-                </div>
-                <span className="offer__rating-value rating__value">
-                  {rating}
-                </span>
-              </div>
+              <StarsRating rating={rating} cssPrefix="offer" showValue />
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
                   {type}

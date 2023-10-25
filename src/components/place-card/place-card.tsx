@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import StarsRating from '../stars-rating/stars-rating';
 
 export type TPlaceCard = {
   bedrooms: number;
@@ -98,12 +99,7 @@ export default function PlaceCard({
             </span>
           </button>
         </div>
-        <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
-            <span style={{ width: `${(card.rating * 100) / 5}%` }} />
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
+        <StarsRating rating={card.rating} cssPrefix="place-card" />
         <h2 className="place-card__name">
           <Link to={`${AppRoute.Offer}/${card.id}`}>{card.title}</Link>
         </h2>
