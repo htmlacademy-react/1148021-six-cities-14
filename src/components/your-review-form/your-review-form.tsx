@@ -1,7 +1,14 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 export default function YourReviewForm(): React.ReactNode {
-  const stars = [5, 4, 3, 2, 1] as const;
+  const stars = [
+    { count: 5, title: 'perfect' },
+    { count: 4, title: 'good' },
+    { count: 3, title: 'not bad' },
+    { count: 2, title: '' },
+    { count: 1, title: '' },
+  ] as const;
+  const reviewMinLength = 50;
 
   const [formData, setFormData] = useState<{
     rating: number;
@@ -17,7 +24,7 @@ export default function YourReviewForm(): React.ReactNode {
     setFormData({ ...formData, [name]: value });
   };
 
-  const onSubmitForm: React.FormEventHandler<HTMLButtonElement> | undefined = (
+  const onSubmitForm: React.FormEventHandler<HTMLFormElement> | undefined = (
     event
   ) => {
     event.preventDefault();
@@ -26,39 +33,44 @@ export default function YourReviewForm(): React.ReactNode {
 
   useEffect(() => {
     setIsFormValid(
-      Object.values(formData).reduce((prev, curr) => prev && !!curr, true)
+      Object.values(formData).reduce((prev, curr) => prev && !!curr, true) &&
+        formData.review.length >= reviewMinLength
     );
   }, [formData]);
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form
+      className="reviews__form form"
+      action="#"
+      method="post"
+      onSubmit={onSubmitForm}
+    >
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
 
       <div className="reviews__rating-form form__rating">
-        {stars.map((star) => (
-          <input
-            className="form__rating-input visually-hidden"
-            key={`${star}star-input`}
-            name="rating"
-            id={`${star}-stars`}
-            type="radio"
-            value={star}
-            onChange={onFormFieldChange}
-          />
-        ))}
-        {stars.map((star) => (
-          <label
-            key={`${star}star-label`}
-            htmlFor={`${star}-stars`}
-            className="reviews__rating-label form__rating-label"
-            title="perfect"
-          >
-            <svg className="form__star-image" width={37} height={33}>
-              <use xlinkHref="#icon-star" />
-            </svg>
-          </label>
+        {stars.map(({ count, title }) => (
+          <Fragment key={count}>
+            <input
+              className="form__rating-input visually-hidden"
+              name="rating"
+              id={`${count}-stars`}
+              type="radio"
+              value={count}
+              checked={formData.rating === count || undefined}
+              onChange={onFormFieldChange}
+            />
+            <label
+              htmlFor={`${count}-stars`}
+              className="reviews__rating-label form__rating-label"
+              title={title}
+            >
+              <svg className="form__star-image" width={37} height={33}>
+                <use xlinkHref="#icon-star" />
+              </svg>
+            </label>
+          </Fragment>
         ))}
       </div>
 
@@ -75,13 +87,13 @@ export default function YourReviewForm(): React.ReactNode {
         <p className="reviews__help">
           To submit review please make sure to set{' '}
           <span className="reviews__star">rating</span> and describe your stay
-          with at least <b className="reviews__text-amount">50 characters</b>.
+          with at least{' '}
+          <b className="reviews__text-amount">{reviewMinLength} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"
           type="submit"
           disabled={!isFormValid}
-          onClick={onSubmitForm}
         >
           Submit
         </button>
