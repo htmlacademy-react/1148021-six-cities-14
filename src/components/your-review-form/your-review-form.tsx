@@ -17,34 +17,26 @@ export default function YourReviewForm(): React.ReactNode {
 
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const handleFormFieldChange: React.ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleFormFieldChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFormSubmit:
-    | React.FormEventHandler<HTMLFormElement>
-    | undefined = (event) => {
+  const handleFormSubmit: React.FormEventHandler<HTMLFormElement> | undefined = (event) => {
     event.preventDefault();
     //todo: send formData
   };
 
   useEffect(() => {
     setIsFormValid(
-      Object.values(formData).reduce((prev, curr) => prev && !!curr, true) &&
-        formData.review.length >= reviewMinLength
+      Object.values(formData).reduce((prev, curr) => prev && !!curr, true) && formData.review.length >= reviewMinLength
     );
   }, [formData]);
 
   return (
-    <form
-      className="reviews__form form"
-      action="#"
-      method="post"
-      onSubmit={handleFormSubmit}
-    >
+    <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
@@ -60,11 +52,7 @@ export default function YourReviewForm(): React.ReactNode {
               value={count}
               onChange={handleFormFieldChange}
             />
-            <label
-              htmlFor={`${count}-stars`}
-              className="reviews__rating-label form__rating-label"
-              title={title}
-            >
+            <label htmlFor={`${count}-stars`} className="reviews__rating-label form__rating-label" title={title}>
               <svg className="form__star-image" width={37} height={33}>
                 <use xlinkHref="#icon-star" />
               </svg>
@@ -84,16 +72,10 @@ export default function YourReviewForm(): React.ReactNode {
 
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set{' '}
-          <span className="reviews__star">rating</span> and describe your stay
-          with at least{' '}
-          <b className="reviews__text-amount">{reviewMinLength} characters</b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
+          with at least <b className="reviews__text-amount">{reviewMinLength} characters</b>.
         </p>
-        <button
-          className="reviews__submit form__submit button"
-          type="submit"
-          disabled={!isFormValid}
-        >
+        <button className="reviews__submit form__submit button" type="submit" disabled={!isFormValid}>
           Submit
         </button>
       </div>
