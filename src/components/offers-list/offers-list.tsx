@@ -12,7 +12,9 @@ export default function OffersList({
 }: TOffersListProps): React.ReactNode {
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
 
-  const onCardHover = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleCardHover = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     const cardEl: HTMLElement | null = (event.target as HTMLElement).closest(
       '[data-card-id]'
     );
@@ -57,7 +59,7 @@ export default function OffersList({
           </ul>
         </form>
         {/* prettier-ignore */}
-        <div className="cities__places-list places__list tabs__content" onMouseOver={(event) => onCardHover(event)}>
+        <div className="cities__places-list places__list tabs__content" onMouseOver={handleCardHover}>
           {offers.map((offer) => <PlaceCard key={offer.id} card={offer} section={'cities'}/>)}
         </div>
       </section>

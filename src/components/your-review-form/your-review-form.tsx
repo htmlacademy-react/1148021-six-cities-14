@@ -17,16 +17,16 @@ export default function YourReviewForm(): React.ReactNode {
 
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const onFormFieldChange: React.ChangeEventHandler<
+  const handleFormFieldChange: React.ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const onSubmitForm: React.FormEventHandler<HTMLFormElement> | undefined = (
-    event
-  ) => {
+  const handleFormSubmit:
+    | React.FormEventHandler<HTMLFormElement>
+    | undefined = (event) => {
     event.preventDefault();
     //todo: send formData
   };
@@ -43,7 +43,7 @@ export default function YourReviewForm(): React.ReactNode {
       className="reviews__form form"
       action="#"
       method="post"
-      onSubmit={onSubmitForm}
+      onSubmit={handleFormSubmit}
     >
       <label className="reviews__label form__label" htmlFor="review">
         Your review
@@ -58,7 +58,7 @@ export default function YourReviewForm(): React.ReactNode {
               id={`${count}-stars`}
               type="radio"
               value={count}
-              onChange={onFormFieldChange}
+              onChange={handleFormFieldChange}
             />
             <label
               htmlFor={`${count}-stars`}
@@ -79,7 +79,7 @@ export default function YourReviewForm(): React.ReactNode {
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formData.review}
-        onChange={onFormFieldChange}
+        onChange={handleFormFieldChange}
       />
 
       <div className="reviews__button-wrapper">
