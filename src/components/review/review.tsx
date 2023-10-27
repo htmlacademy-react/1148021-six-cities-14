@@ -1,4 +1,6 @@
-type TReview = {
+import StarsRating from '../stars-rating/stars-rating';
+
+export type TReview = {
   comment: string;
   date: string;
   id: number;
@@ -33,12 +35,7 @@ export default function Review({ review }: TReviewProps): React.ReactNode {
         <span className="reviews__user-name">{review.user.name}</span>
       </div>
       <div className="reviews__info">
-        <div className="reviews__rating rating">
-          <div className="reviews__stars rating__stars">
-            <span style={{ width: `${(review.rating * 100) / 5}%` }} />
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
+        <StarsRating rating={review.rating} cssPrefix="reviews" />
         <p className="reviews__text">{review.comment}</p>
         <time className="reviews__time" dateTime={review.date}>
           {new Date(review.date).toLocaleDateString('en-us', {
