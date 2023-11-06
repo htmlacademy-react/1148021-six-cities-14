@@ -5,12 +5,12 @@ import { TCity } from '../components/place-card/place-card';
 export default function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: TCity): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const isRenderedRef = useRef<boolean>(false);
-  let mapInstance: Map | null = null;
 
   useEffect(() => {
-    if (mapRef.current != null && !isRenderedRef.current) {
-      mapInstance = new Map(mapRef.current, {
-        center: { lat: city.location.latitude, lng: city.location.longitude },
+    if (mapRef.current !== null && !isRenderedRef.current) {
+      const { latitude: lat, longitude: lng } = city.location;
+      const mapInstance = new Map(mapRef.current, {
+        center: { lat, lng },
         zoom: city.location.zoom,
       });
 
