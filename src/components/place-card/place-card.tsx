@@ -22,7 +22,7 @@ export type TPlaceCard = {
   type: string;
 };
 
-type TCity = {
+export type TCity = {
   location: TLocation;
   name: string;
 };
