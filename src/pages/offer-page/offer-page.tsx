@@ -3,11 +3,12 @@ import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
 import Review from '../../components/review/review';
 import classNames from 'classnames';
 import { Helmet } from 'react-helmet-async';
-import { AppTitle } from '../../const';
+import { AppRoute, AppTitle } from '../../const';
 import YourReviewForm from '../../components/your-review-form/your-review-form';
-import { offers } from '../../mocks/offers';
 import { reviews } from '../../mocks/reviews';
 import StarsRating from '../../components/stars-rating/stars-rating';
+import { Navigate, useParams } from 'react-router-dom';
+import { offers } from '../../mocks/offers';
 
 export default function OfferPage(): React.ReactNode {
   const images = [
@@ -19,31 +20,23 @@ export default function OfferPage(): React.ReactNode {
     'img/apartment-01.jpg',
   ];
 
-  const goods = [
-    'Wi-Fi',
-    'Washing machine',
-    'Towels',
-    'Heating',
-    'Coffee machine',
-    'Baby seat',
-  ];
+  const goods = ['Wi-Fi', 'Washing machine', 'Towels', 'Heating', 'Coffee machine', 'Baby seat'];
 
   const otherPlaceCards: Array<TPlaceCard> = offers.slice(0, 3);
 
-  const {
-    isPremium,
-    rating,
-    price,
-    isFavorite,
-    bedrooms,
-    type,
-    maxAdults,
-    title,
-    host,
-    description,
-  } = offers[0];
+  const { id } = useParams();
 
-  //const { id } = useParams(); // todo
+  if (!id) {
+    return <Navigate to={AppRoute.NotFound} />;
+  }
+
+  const currentOffer = offers.find((offer) => offer.id === +id);
+
+  if (!currentOffer) {
+    return <Navigate to={AppRoute.NotFound} />;
+  }
+
+  const { isPremium, rating, price, isFavorite, bedrooms, type, maxAdults, title, host, description } = currentOffer;
 
   return (
     <div className="page">
@@ -59,11 +52,7 @@ export default function OfferPage(): React.ReactNode {
             <div className="offer__gallery">
               {images.map((image) => (
                 <div className="offer__image-wrapper" key={image}>
-                  <img
-                    className="offer__image"
-                    src={image}
-                    alt="Photo studio"
-                  />
+                  <img className="offer__image" src={image} alt="Photo studio" />
                 </div>
               ))}
             </div>
@@ -89,22 +78,14 @@ export default function OfferPage(): React.ReactNode {
                   <svg className="offer__bookmark-icon" width={31} height={33}>
                     <use xlinkHref="#icon-bookmark" />
                   </svg>
-                  <span className="visually-hidden">
-                    {isFavorite ? 'In' : 'To'} bookmarks
-                  </span>
+                  <span className="visually-hidden">{isFavorite ? 'In' : 'To'} bookmarks</span>
                 </button>
               </div>
               <StarsRating rating={rating} cssPrefix="offer" showValue />
               <ul className="offer__features">
-                <li className="offer__feature offer__feature--entire">
-                  {type}
-                </li>
-                <li className="offer__feature offer__feature--bedrooms">
-                  {bedrooms} Bedrooms
-                </li>
-                <li className="offer__feature offer__feature--adults">
-                  Max {maxAdults} adults
-                </li>
+                <li className="offer__feature offer__feature--entire">{type}</li>
+                <li className="offer__feature offer__feature--bedrooms">{bedrooms} Bedrooms</li>
+                <li className="offer__feature offer__feature--adults">Max {maxAdults} adults</li>
               </ul>
               <div className="offer__price">
                 <b className="offer__price-value">€{price}</b>
@@ -133,9 +114,7 @@ export default function OfferPage(): React.ReactNode {
                     />
                   </div>
                   <span className="offer__user-name">{host.name}</span>
-                  {host.isPro && (
-                    <span className="offer__user-status">Pro</span>
-                  )}
+                  {host.isPro && <span className="offer__user-status">Pro</span>}
                 </div>
                 <div className="offer__description">
                   <p className="offer__text">{description}</p>
@@ -143,8 +122,7 @@ export default function OfferPage(): React.ReactNode {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews ·{' '}
-                  <span className="reviews__amount">{reviews.length}</span>
+                  Reviews · <span className="reviews__amount">{reviews.length}</span>
                 </h2>
                 <ul className="reviews__list">
                   {reviews.map((review) => (
@@ -159,9 +137,7 @@ export default function OfferPage(): React.ReactNode {
         </section>
         <div className="container">
           <section className="near-places places">
-            <h2 className="near-places__title">
-              Other places in the neighbourhood
-            </h2>
+            <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
               {otherPlaceCards.map((card) => (
                 <PlaceCard key={card.id} card={card} section="cities" />

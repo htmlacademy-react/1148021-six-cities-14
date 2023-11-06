@@ -6,31 +6,17 @@ type TOffersListProps = {
   city: string;
 };
 
-export default function OffersList({
-  offers,
-  city,
-}: TOffersListProps): React.ReactNode {
+export default function OffersList({ offers, city }: TOffersListProps): React.ReactNode {
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
 
-  const handleCardHover = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    const cardEl: HTMLElement | null = (event.target as HTMLElement).closest(
-      '[data-card-id]'
-    );
-
-    if (!cardEl) {
-      return;
-    }
-
-    if (cardEl.dataset.cardId && activeCardId !== +cardEl.dataset.cardId) {
-      setActiveCardId(+cardEl.dataset.cardId);
-    }
+  const handleCardHover = (id: TPlaceCard['id'] | null) => {
+    setActiveCardId(id);
   };
 
   return (
     <div className="cities__places-container container">
       <section className="cities__places places">
+        activeCardId = {activeCardId}
         <h2 className="visually-hidden">Places</h2>
         <b className="places__found">
           {offers.length} places to stay in {city}
@@ -58,9 +44,10 @@ export default function OffersList({
             </li>
           </ul>
         </form>
-        {/* prettier-ignore */}
-        <div className="cities__places-list places__list tabs__content" onMouseOver={handleCardHover}>
-          {offers.map((offer) => <PlaceCard key={offer.id} card={offer} section={'cities'}/>)}
+        <div className="cities__places-list places__list tabs__content">
+          {offers.map((offer) => (
+            <PlaceCard key={offer.id} card={offer} section={'cities'} onCardHover={handleCardHover} />
+          ))}
         </div>
       </section>
       <div className="cities__right-section">

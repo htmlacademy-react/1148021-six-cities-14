@@ -43,16 +43,24 @@ type THost = {
 type TPlaceCardProps = {
   card: TPlaceCard;
   section: 'cities' | 'favorites';
+  onCardHover?: (id: TPlaceCard['id'] | null) => void;
 };
 
-export default function PlaceCard({
-  card,
-  section,
-}: TPlaceCardProps): React.ReactNode {
+export default function PlaceCard({ card, section, onCardHover }: TPlaceCardProps): React.ReactNode {
+  const handleMouseEnter = () => {
+    onCardHover?.(card.id);
+  };
+
+  const handleMouseLeave = () => {
+    onCardHover?.(null);
+  };
+
   return (
     <article
       className={classNames(`${section}__card`, 'place-card')}
       data-card-id={card.id}
+      onMouseEnter={onCardHover && handleMouseEnter}
+      onMouseLeave={onCardHover && handleMouseLeave}
     >
       {card.isPremium && (
         <div className="place-card__mark">
@@ -60,20 +68,9 @@ export default function PlaceCard({
         </div>
       )}
       {card.previewImage && (
-        <div
-          className={classNames(
-            `${section}__image-wrapper`,
-            'place-card__image-wrapper'
-          )}
-        >
+        <div className={classNames(`${section}__image-wrapper`, 'place-card__image-wrapper')}>
           <Link to={`${AppRoute.Offer}/${card.id}`}>
-            <img
-              className="place-card__image"
-              src={card.previewImage}
-              width={260}
-              height={200}
-              alt="Place image"
-            />
+            <img className="place-card__image" src={card.previewImage} width={260} height={200} alt="Place image" />
           </Link>
         </div>
       )}
@@ -94,9 +91,7 @@ export default function PlaceCard({
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark" />
             </svg>
-            <span className="visually-hidden">
-              {card.isFavorite ? 'In' : 'To'} bookmarks
-            </span>
+            <span className="visually-hidden">{card.isFavorite ? 'In' : 'To'} bookmarks</span>
           </button>
         </div>
         <StarsRating rating={card.rating} cssPrefix="place-card" />
