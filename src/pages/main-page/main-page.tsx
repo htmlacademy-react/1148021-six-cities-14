@@ -9,14 +9,7 @@ type MainPageProps = {
 };
 
 export default function MainPage({ offers }: MainPageProps): React.ReactNode {
-  const cities = [
-    'Paris',
-    'Cologne',
-    'Brussels',
-    'Amsterdam',
-    'Hamburg',
-    'Dusseldorf',
-  ];
+  const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
   const [cityOffers, setCityOffers] = React.useState<Array<TPlaceCard>>([]);
   const [activeCity, setActiveCity] = React.useState(cities[0]);
@@ -40,11 +33,7 @@ export default function MainPage({ offers }: MainPageProps): React.ReactNode {
     <div className="page page--gray page--main">
       <Header />
 
-      <main
-        className={`page__main page__main--index${
-          cityOffers.length <= 0 ? ' page__main--index-empty' : ''
-        }`}
-      >
+      <main className={`page__main page__main--index${cityOffers.length <= 0 ? ' page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -52,11 +41,9 @@ export default function MainPage({ offers }: MainPageProps): React.ReactNode {
               {cities.map((city) => (
                 <li className="locations__item" key={city}>
                   <a
-                    className={classNames(
-                      'locations__item-link',
-                      'tabs__item',
-                      { 'tabs__item--active': activeCity === city }
-                    )}
+                    className={classNames('locations__item-link', 'tabs__item', {
+                      'tabs__item--active': activeCity === city,
+                    })}
                     href="#"
                     onClick={() => setActiveCity(city)}
                   >
@@ -76,8 +63,7 @@ export default function MainPage({ offers }: MainPageProps): React.ReactNode {
                 <div className="cities__status-wrapper tabs__content">
                   <b className="cities__status">No places to stay available</b>
                   <p className="cities__status-description">
-                    We could not find any property available at the moment in{' '}
-                    {activeCity}
+                    We could not find any property available at the moment in {activeCity}
                   </p>
                 </div>
               </section>

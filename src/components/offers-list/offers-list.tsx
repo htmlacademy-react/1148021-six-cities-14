@@ -1,36 +1,23 @@
 import React, { useState } from 'react';
 import PlaceCard, { TPlaceCard } from '../place-card/place-card';
+import Map from '../map/map';
 
 type TOffersListProps = {
   offers: Array<TPlaceCard>;
   city: string;
 };
 
-export default function OffersList({
-  offers,
-  city,
-}: TOffersListProps): React.ReactNode {
+export default function OffersList({ offers, city }: TOffersListProps): React.ReactNode {
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
 
-  const handleCardHover = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    const cardEl: HTMLElement | null = (event.target as HTMLElement).closest(
-      '[data-card-id]'
-    );
-
-    if (!cardEl) {
-      return;
-    }
-
-    if (cardEl.dataset.cardId && activeCardId !== +cardEl.dataset.cardId) {
-      setActiveCardId(+cardEl.dataset.cardId);
-    }
+  const handleCardHover = (id: TPlaceCard['id'] | null) => {
+    setActiveCardId(id);
   };
 
   return (
     <div className="cities__places-container container">
       <section className="cities__places places">
+        activeCardId = {activeCardId}
         <h2 className="visually-hidden">Places</h2>
         <b className="places__found">
           {offers.length} places to stay in {city}
@@ -58,13 +45,31 @@ export default function OffersList({
             </li>
           </ul>
         </form>
-        {/* prettier-ignore */}
-        <div className="cities__places-list places__list tabs__content" onMouseOver={handleCardHover}>
-          {offers.map((offer) => <PlaceCard key={offer.id} card={offer} section={'cities'}/>)}
+        <div className="cities__places-list places__list tabs__content">
+          {offers.map((offer) => (
+            <PlaceCard key={offer.id} card={offer} section={'cities'} onCardHover={handleCardHover} />
+          ))}
         </div>
       </section>
       <div className="cities__right-section">
-        <section className="cities__map map" />
+        {/* todo: replace mock city & points */}
+        <Map
+          city={{
+            name: 'Amsterdam',
+            location: {
+              latitude: 52.37454,
+              longitude: 4.897976,
+              zoom: 13,
+            },
+          }}
+          points={[
+            [52.3909553943508, 4.85309666406198],
+            [52.3609553943508, 4.85309666406198],
+            [52.3909553943508, 4.929309666406198],
+            [52.3809553943508, 4.939309666406198],
+          ]}
+          selectedPoint={[52.3909553943508, 4.85309666406198]}
+        />
       </div>
     </div>
   );
