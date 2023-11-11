@@ -54,6 +54,7 @@ export default function OffersList({ offers, city }: TOffersListProps): React.Re
       <div className="cities__right-section">
         {/* todo: replace mock city & points */}
         <Map
+          style={{ height: '100%' }}
           city={{
             name: 'Amsterdam',
             location: {

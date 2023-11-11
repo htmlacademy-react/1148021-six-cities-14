@@ -9,6 +9,7 @@ import { reviews } from '../../mocks/reviews';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
 import { offers } from '../../mocks/offers';
+import Map from '../../components/map/map';
 
 export default function OfferPage(): React.ReactNode {
   const images = [
@@ -36,7 +37,8 @@ export default function OfferPage(): React.ReactNode {
     return <Navigate to={AppRoute.NotFound} />;
   }
 
-  const { isPremium, rating, price, isFavorite, bedrooms, type, maxAdults, title, host, description } = currentOffer;
+  const { isPremium, rating, price, isFavorite, bedrooms, type, maxAdults, title, host, description, city } =
+    currentOffer;
 
   return (
     <div className="page">
@@ -133,7 +135,16 @@ export default function OfferPage(): React.ReactNode {
               </section>
             </div>
           </div>
-          <section className="offer__map map" />
+          {city.name}
+          <Map
+            section="offer"
+            city={city}
+            points={[
+              [52.3909553943508, 4.85309666406198],
+              [52.3609553943508, 4.85309666406198],
+              [52.3909553943508, 4.929309666406198],
+            ]}
+          />
         </section>
         <div className="container">
           <section className="near-places places">
