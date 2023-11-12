@@ -33,6 +33,9 @@ export default function Map({ city, points, selectedPoint, section = 'cities', s
 
   useEffect(() => {
     if (map) {
+      const { latitude, longitude, zoom } = city.location;
+      map.setView([latitude, longitude], zoom);
+
       const markerLayer = layerGroup().addTo(map);
       points.forEach((point) => {
         const marker = new Marker(point);

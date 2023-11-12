@@ -1,22 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { TPlaceCard } from '../../components/place-card/place-card';
 import { Header } from '../../components/header/header';
-import classNames from 'classnames';
 import OffersList from '../../components/offers-list/offers-list';
+import { CityNamesList } from '../../const';
+import CitiesTabs from '../../components/cities-tabs/cities-tabs';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { updateCity, updateOffersList } from '../../store/action';
 
 type MainPageProps = {
   offers: Array<TPlaceCard>;
 };
 
 export default function MainPage({ offers }: MainPageProps): React.ReactNode {
-  const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+  const activeCity = useAppSelector((state) => state.city);
+  const cityOffers = useAppSelector((state) => state.offersList);
 
-  const [cityOffers, setCityOffers] = React.useState<Array<TPlaceCard>>([]);
-  const [activeCity, setActiveCity] = React.useState(cities[0]);
-
-  useEffect(() => {
-    setCityOffers(offers.filter((offer) => offer.city?.name === activeCity));
-  }, [activeCity, offers]);
+  const dispatch = useAppDispatch();
 
   // React.useEffect(() => {
   //   fetch('https://14.react.pages.academy/six-cities/offers', {
@@ -35,28 +34,17 @@ export default function MainPage({ offers }: MainPageProps): React.ReactNode {
 
       <main className={`page__main page__main--index${cityOffers.length <= 0 ? ' page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
-        <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              {cities.map((city) => (
-                <li className="locations__item" key={city}>
-                  <a
-                    className={classNames('locations__item-link', 'tabs__item', {
-                      'tabs__item--active': activeCity === city,
-                    })}
-                    href="#"
-                    onClick={() => setActiveCity(city)}
-                  >
-                    <span>{city}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+        <CitiesTabs
+          cities={CityNamesList}
+          onCityTabClick={(city) => {
+            dispatch(updateCity(city));
+            dispatch(updateOffersList({ cityName: city, offers }));
+          }}
+        />
+
         <div className="cities">
           {cityOffers.length > 0 ? (
-            <OffersList offers={offers} city={activeCity} />
+            <OffersList offers={cityOffers} city={activeCity} />
           ) : (
             <div className="cities__places-container cities__places-container--empty container">
               <section className="cities__no-places">

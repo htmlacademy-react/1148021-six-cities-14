@@ -1,3 +1,5 @@
+import { CityName } from './components/place-card/place-card';
+
 export enum AppRoute {
   Main = '/',
   Login = '/login',
@@ -19,3 +21,5 @@ export const URL_MARKER_DEFAULT =
 
 export const URL_MARKER_CURRENT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
+
+export const CityNamesList: Array<CityName> = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
