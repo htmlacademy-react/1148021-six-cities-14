@@ -7,7 +7,8 @@ type TOffersListProps = {
   city: string;
 };
 
-export default function OffersList({ offers, city }: TOffersListProps): React.ReactNode {
+export default function OffersList({ offers, city: cityName }: TOffersListProps): React.ReactNode {
+  const city = offers[0].city;
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
 
   const handleCardHover = (id: TPlaceCard['id'] | null) => {
@@ -20,7 +21,7 @@ export default function OffersList({ offers, city }: TOffersListProps): React.Re
         activeCardId = {activeCardId}
         <h2 className="visually-hidden">Places</h2>
         <b className="places__found">
-          {offers.length} places to stay in {city}
+          {offers.length} places to stay in {cityName}
         </b>
         <form className="places__sorting" action="#" method="get">
           <span className="places__sorting-caption">Sort by</span>
@@ -52,23 +53,17 @@ export default function OffersList({ offers, city }: TOffersListProps): React.Re
         </div>
       </section>
       <div className="cities__right-section">
-        {/* todo: replace mock city & points */}
         <Map
-          city={{
-            name: 'Amsterdam',
-            location: {
-              latitude: 52.37454,
-              longitude: 4.897976,
-              zoom: 13,
-            },
-          }}
-          points={[
-            [52.3909553943508, 4.85309666406198],
-            [52.3609553943508, 4.85309666406198],
-            [52.3909553943508, 4.929309666406198],
-            [52.3809553943508, 4.939309666406198],
-          ]}
-          selectedPoint={[52.3909553943508, 4.85309666406198]}
+          style={{ height: '100%' }}
+          city={city}
+          points={offers.map(({ location }) => [location.latitude, location.longitude])}
+          selectedPoint={(() => {
+            const activeOffer = offers.find((offer) => offer.id === activeCardId);
+            if (!activeOffer) {
+              return undefined;
+            }
+            return [activeOffer.location.latitude, activeOffer.location.longitude];
+          })()}
         />
       </div>
     </div>

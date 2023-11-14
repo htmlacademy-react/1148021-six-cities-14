@@ -11,6 +11,8 @@ type MapProps = {
   city: TCity;
   points: Array<TPoint>;
   selectedPoint?: TPoint | undefined;
+  section?: 'cities' | 'offer';
+  style?: React.CSSProperties;
 };
 
 const defaultCustomIcon = new Icon({
@@ -25,12 +27,15 @@ const currentCustomIcon = new Icon({
   iconAnchor: [20, 40],
 });
 
-export default function Map({ city, points, selectedPoint }: MapProps): React.ReactNode {
+export default function Map({ city, points, selectedPoint, section = 'cities', style }: MapProps): React.ReactNode {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
   useEffect(() => {
     if (map) {
+      const { latitude, longitude, zoom } = city.location;
+      map.setView([latitude, longitude], zoom);
+
       const markerLayer = layerGroup().addTo(map);
       points.forEach((point) => {
         const marker = new Marker(point);
@@ -50,5 +55,5 @@ export default function Map({ city, points, selectedPoint }: MapProps): React.Re
     }
   }, [map, city, points, selectedPoint]);
 
-  return <section className="cities__map map" ref={mapRef} style={{ height: '100%' }}></section>;
+  return <section className={`${section}__map map`} ref={mapRef} style={style}></section>;
 }

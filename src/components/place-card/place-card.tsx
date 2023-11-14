@@ -24,8 +24,10 @@ export type TPlaceCard = {
 
 export type TCity = {
   location: TLocation;
-  name: string;
+  name: CityName;
 };
+
+export type CityName = 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf';
 
 type TLocation = {
   latitude: number;
