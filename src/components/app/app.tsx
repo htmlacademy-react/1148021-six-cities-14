@@ -1,6 +1,6 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import MainPage from '../../pages/main-page/main-page';
-import { AppRoute, AuthStatus } from '../../const';
+import { AppRoute, AuthStatus, DefaultCity } from '../../const';
 import LoginPage from '../../pages/login-page/login-page';
 import FavoritesPage from '../../pages/favorites-page/favorites-page';
 import OfferPage from '../../pages/offer-page/offer-page';
@@ -22,7 +22,8 @@ export default function App({ offers, favorites }: AppProps): React.ReactNode {
       <HelmetProvider>
         <BrowserRouter>
           <Routes>
-            <Route path={AppRoute.Main} element={<MainPage offers={offers} />} />
+            <Route path={AppRoute.Main} element={<Navigate to={`/${DefaultCity}`} />} />
+            <Route path={`${AppRoute.Main}/:city?`} element={<MainPage offers={offers} />} />
             <Route path={AppRoute.Login} element={<LoginPage />} />
             <Route path={`${AppRoute.Offer}/:id`} element={<OfferPage />} />
             <Route
