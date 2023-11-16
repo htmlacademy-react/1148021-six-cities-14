@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../../const';
+import { AppRoute, CityName } from '../../const';
 import StarsRating from '../stars-rating/stars-rating';
 
 export type TPlaceCard = {
@@ -26,8 +26,6 @@ export type TCity = {
   location: TLocation;
   name: CityName;
 };
-
-export type CityName = 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf';
 
 type TLocation = {
   latitude: number;
