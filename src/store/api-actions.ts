@@ -13,8 +13,6 @@ export const fetchOffers = createAsyncThunk<
     extra: AxiosInstance;
   }
 >('data/fetchOffers', async (_arg, { dispatch, extra: api }) => {
-  const { data } = await api.get<Array<TPlaceCard>>('/offers').catch(() => {
-    return { data: [] };
-  });
+  const { data } = await api.get<Array<TPlaceCard>>('/offers').catch(() => ({ data: [] }));
   dispatch(loadOffers(data));
 });
