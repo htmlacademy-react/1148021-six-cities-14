@@ -12,7 +12,7 @@ import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks';
 
 export default function OfferPage(): React.ReactNode {
-  const offers = useAppSelector((state) => state.offersList);
+  const offers = useAppSelector((state) => state.offersList) || []; // todo: load from server
 
   const images = [
     'img/room.jpg',
