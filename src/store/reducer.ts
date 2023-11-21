@@ -1,12 +1,13 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { sortingActions, updateCity, updateOffersList } from './action';
+import { loadOffers, sortingActions, updateCity, updateCityOffers } from './actions';
 import { State } from './store.types';
 import { TPlaceCard } from '../components/place-card/place-card';
 import { SortOptions } from '../components/offers-sorting/offers-sorting.types';
 
 const initialState: State = {
   city: null,
-  offersList: [],
+  offersList: null,
+  cityOffers: [],
 };
 
 const offersSortFunctions = {
@@ -20,14 +21,17 @@ const reducer = createReducer(initialState, (builder) => {
   builder.addCase(updateCity, (state, { payload }) => {
     state.city = payload;
   });
-  builder.addCase(updateOffersList, (state, { payload }) => {
-    state.offersList = payload.offers.filter((offer) => offer.city.name === payload.cityName);
+  builder.addCase(updateCityOffers, (state, { payload }) => {
+    state.cityOffers = payload.offers.filter((offer) => offer.city.name === payload.cityName);
   });
   Object.entries(SortOptions).forEach(([, option]) => {
     const actionName = sortingActions[option];
     builder.addCase(actionName, (state, { payload }) => {
-      state.offersList = offersSortFunctions[option](payload.offers);
+      state.cityOffers = offersSortFunctions[option](payload.offers);
     });
+  });
+  builder.addCase(loadOffers, (state, action) => {
+    state.offersList = action.payload;
   });
 });
 

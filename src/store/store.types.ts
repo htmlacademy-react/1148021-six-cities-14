@@ -4,7 +4,8 @@ import { CityName } from '../const';
 
 export type State = {
   city: CityName | null;
-  offersList: Array<TPlaceCard>;
+  offersList: Array<TPlaceCard> | null;
+  cityOffers: Array<TPlaceCard>;
 };
 
 export type AppDispatch = typeof store.dispatch;
