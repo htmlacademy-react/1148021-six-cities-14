@@ -3,42 +3,33 @@ import { Header } from '../../components/header/header';
 import OffersList from '../../components/offers-list/offers-list';
 import CitiesTabs from '../../components/cities-tabs/cities-tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { updateCity, updateOffersList } from '../../store/action';
+import { updateCity, updateCityOffers } from '../../store/actions';
 import { Navigate, useParams } from 'react-router-dom';
-import { TPlaceCard } from '../../components/place-card/place-card';
 import { AppCities, CityName, DefaultCity } from '../../const';
+import { fetchOffers } from '../../store/api-actions';
+import Preloader from '../../components/preloader/preloader';
 
-type MainPageProps = {
-  offers: Array<TPlaceCard>;
-};
-
-export default function MainPage({ offers }: MainPageProps): React.ReactNode {
+export default function MainPage(): React.ReactNode {
   const { city } = useParams();
 
   const activeCity = useAppSelector((state) => state.city);
-  const cityOffers = useAppSelector((state) => state.offersList);
+  const allOffers = useAppSelector((state) => state.offersList);
+  const cityOffers = useAppSelector((state) => state.cityOffers);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(fetchOffers());
+  }, []);
+
+  useEffect(() => {
     dispatch(updateCity(city as CityName));
-    dispatch(updateOffersList({ cityName: city as CityName, offers }));
-  }, [dispatch, offers, city]);
+    dispatch(updateCityOffers({ cityName: city as CityName, offers: allOffers || [] }));
+  }, [dispatch, city, allOffers]);
 
   if (!AppCities.includes(city as CityName)) {
     return <Navigate to={`/${DefaultCity}`} />;
   }
-
-  // React.useEffect(() => {
-  //   fetch('https://14.react.pages.academy/six-cities/offers', {
-  //     method: 'GET',
-  //   })
-  //     .then((response) => response.json())
-  //     .then((result: Array<TPlaceCard>) => {
-  //       //setAllOffers(result);
-  //       //setOffers(result);
-  //     });
-  // }, []);
 
   return (
     <div className="page page--gray page--main">
@@ -53,15 +44,21 @@ export default function MainPage({ offers }: MainPageProps): React.ReactNode {
             <OffersList offers={cityOffers} city={activeCity as CityName} />
           ) : (
             <div className="cities__places-container cities__places-container--empty container">
-              <section className="cities__no-places">
-                <div className="cities__status-wrapper tabs__content">
-                  <b className="cities__status">No places to stay available</b>
-                  <p className="cities__status-description">
-                    We could not find any property available at the moment in {activeCity}
-                  </p>
-                </div>
-              </section>
-              <div className="cities__right-section" />
+              {!allOffers ? (
+                <Preloader />
+              ) : (
+                <>
+                  <section className="cities__no-places">
+                    <div className="cities__status-wrapper tabs__content">
+                      <b className="cities__status">No places to stay available</b>
+                      <p className="cities__status-description">
+                        We could not find any property available at the moment in {activeCity}
+                      </p>
+                    </div>
+                  </section>
+                  <div className="cities__right-section" />
+                </>
+              )}
             </div>
           )}
         </div>

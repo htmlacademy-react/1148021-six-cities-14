@@ -8,10 +8,12 @@ import YourReviewForm from '../../components/your-review-form/your-review-form';
 import { reviews } from '../../mocks/reviews';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
-import { offers } from '../../mocks/offers';
 import Map from '../../components/map/map';
+import { useAppSelector } from '../../hooks';
 
 export default function OfferPage(): React.ReactNode {
+  const offers = useAppSelector((state) => state.offersList);
+
   const images = [
     'img/room.jpg',
     'img/apartment-01.jpg',

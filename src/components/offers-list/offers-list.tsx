@@ -3,7 +3,7 @@ import PlaceCard, { TPlaceCard } from '../place-card/place-card';
 import Map from '../map/map';
 import OffersSorting from '../offers-sorting/offers-sorting';
 import { useAppDispatch } from '../../hooks';
-import { sortingActions } from '../../store/action';
+import { sortingActions } from '../../store/actions';
 
 type TOffersListProps = {
   offers: Array<TPlaceCard>;

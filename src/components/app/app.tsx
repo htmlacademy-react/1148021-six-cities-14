@@ -12,18 +12,17 @@ import { Provider } from 'react-redux';
 import { store } from '../../store';
 
 type AppProps = {
-  offers: Array<TPlaceCard>;
   favorites: Array<TPlaceCard>;
 };
 
-export default function App({ offers, favorites }: AppProps): React.ReactNode {
+export default function App({ favorites }: AppProps): React.ReactNode {
   return (
     <Provider store={store}>
       <HelmetProvider>
         <BrowserRouter>
           <Routes>
             <Route path={AppRoute.Main} element={<Navigate to={`/${DefaultCity}`} />} />
-            <Route path={`${AppRoute.Main}/:city?`} element={<MainPage offers={offers} />} />
+            <Route path={`${AppRoute.Main}/:city?`} element={<MainPage />} />
             <Route path={AppRoute.Login} element={<LoginPage />} />
             <Route path={`${AppRoute.Offer}/:id`} element={<OfferPage />} />
             <Route
