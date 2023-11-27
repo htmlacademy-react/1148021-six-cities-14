@@ -23,3 +23,5 @@ export const URL_MARKER_CURRENT =
 export const AppCities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
 export type CityName = (typeof AppCities)[number];
 export const DefaultCity: CityName = 'Paris';
+
+export const TIMEOUT_SHOW_ERROR = 5000;

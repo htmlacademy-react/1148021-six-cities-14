@@ -1,6 +1,6 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import MainPage from '../../pages/main-page/main-page';
-import { AppRoute, AuthStatus, DefaultCity } from '../../const';
+import { AppRoute, DefaultCity } from '../../const';
 import LoginPage from '../../pages/login-page/login-page';
 import FavoritesPage from '../../pages/favorites-page/favorites-page';
 import OfferPage from '../../pages/offer-page/offer-page';
@@ -10,6 +10,9 @@ import { HelmetProvider } from 'react-helmet-async';
 import { TPlaceCard } from '../place-card/place-card';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
+import browserHistory from '../../browser-history';
+import HistoryRouter from '../history-route/history-route';
+import Notification from '../notification/notification';
 
 type AppProps = {
   favorites: Array<TPlaceCard>;
@@ -19,7 +22,8 @@ export default function App({ favorites }: AppProps): React.ReactNode {
   return (
     <Provider store={store}>
       <HelmetProvider>
-        <BrowserRouter>
+        <Notification />
+        <HistoryRouter history={browserHistory}>
           <Routes>
             <Route path={AppRoute.Main} element={<Navigate to={`/${DefaultCity}`} />} />
             <Route path={`${AppRoute.Main}/:city?`} element={<MainPage />} />
@@ -28,14 +32,14 @@ export default function App({ favorites }: AppProps): React.ReactNode {
             <Route
               path={AppRoute.Favorites}
               element={
-                <PrivateRoute authStatus={AuthStatus.Auth}>
+                <PrivateRoute>
                   <FavoritesPage favorites={favorites} />
                 </PrivateRoute>
               }
             />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-        </BrowserRouter>
+        </HistoryRouter>
       </HelmetProvider>
     </Provider>
   );

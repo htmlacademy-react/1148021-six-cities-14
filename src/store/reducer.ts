@@ -1,13 +1,25 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { loadOffers, sortingActions, updateCity, updateCityOffers } from './actions';
+import {
+  loadOffers,
+  requireAuthorization,
+  setError,
+  setUserData,
+  sortingActions,
+  updateCity,
+  updateCityOffers,
+} from './actions';
 import { State } from './store.types';
 import { TPlaceCard } from '../components/place-card/place-card';
 import { SortOptions } from '../components/offers-sorting/offers-sorting.types';
+import { AuthStatus } from '../const';
 
 const initialState: State = {
   city: null,
   offersList: null,
   cityOffers: [],
+  authorizationStatus: AuthStatus.Unknown,
+  error: null,
+  userData: null,
 };
 
 const offersSortFunctions = {
@@ -32,6 +44,15 @@ const reducer = createReducer(initialState, (builder) => {
   });
   builder.addCase(loadOffers, (state, action) => {
     state.offersList = action.payload;
+  });
+  builder.addCase(setError, (state, action) => {
+    state.error = action.payload;
+  });
+  builder.addCase(requireAuthorization, (state, action) => {
+    state.authorizationStatus = action.payload;
+  });
+  builder.addCase(setUserData, (state, action) => {
+    state.userData = action.payload;
   });
 });
 

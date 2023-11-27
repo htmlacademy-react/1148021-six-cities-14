@@ -8,9 +8,7 @@ type FavoritesPageProps = {
   favorites: Array<TPlaceCard>;
 };
 
-export default function FavoritesPage({
-  favorites,
-}: FavoritesPageProps): React.ReactNode {
+export default function FavoritesPage({ favorites }: FavoritesPageProps): React.ReactNode {
   const offersByCity: { [key: string]: Array<TPlaceCard> } = {};
 
   for (const offer of favorites) {
@@ -43,9 +41,10 @@ export default function FavoritesPage({
                       </a>
                     </div>
                   </div>
-                  {/* prettier-ignore */}
                   <div className="favorites__places">
-                    {offersByCity[city].map((offer) => (<PlaceCard key={offer.id} card={offer} section={'favorites'} />))}
+                    {offersByCity[city].map((offer) => (
+                      <PlaceCard key={offer.id} card={offer} section={'favorites'} />
+                    ))}
                   </div>
                 </li>
               ))}
