@@ -19,10 +19,12 @@ export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React
   ] as const;
   const reviewMinLength = 50;
 
+  const initialFormData = { rating: 0, review: '' };
+
   const [formData, setFormData] = useState<{
     rating: number;
     review: string;
-  }>({ rating: 0, review: '' });
+  }>(initialFormData);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -36,6 +38,7 @@ export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> | undefined = (event) => {
     event.preventDefault();
     onSubmit({ comment: formData.review, rating: formData.rating });
+    setFormData(initialFormData); // todo: reset stars
   };
 
   useEffect(() => {
