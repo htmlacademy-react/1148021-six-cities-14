@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { Icon, Marker, layerGroup } from 'leaflet';
 import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
 
-type TPoint = [number, number];
+export type TPoint = [number, number];
 
 type MapProps = {
   city: TCity;

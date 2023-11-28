@@ -1,6 +1,15 @@
 import { Fragment, useEffect, useState } from 'react';
 
-export default function YourReviewForm(): React.ReactNode {
+export type ReviewRequestData = {
+  comment: string;
+  rating: number;
+};
+
+type YourReviewFormProps = {
+  onSubmit: (data: ReviewRequestData) => void;
+};
+
+export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React.ReactNode {
   const stars = [
     { count: 5, title: 'perfect' },
     { count: 4, title: 'good' },
@@ -26,7 +35,7 @@ export default function YourReviewForm(): React.ReactNode {
 
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> | undefined = (event) => {
     event.preventDefault();
-    //todo: send formData
+    onSubmit({ comment: formData.review, rating: formData.rating });
   };
 
   useEffect(() => {

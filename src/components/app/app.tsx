@@ -37,6 +37,7 @@ export default function App({ favorites }: AppProps): React.ReactNode {
                 </PrivateRoute>
               }
             />
+            <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </HistoryRouter>
