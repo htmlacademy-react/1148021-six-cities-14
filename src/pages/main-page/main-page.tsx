@@ -5,7 +5,7 @@ import CitiesTabs from '../../components/cities-tabs/cities-tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { updateCity, updateCityOffers } from '../../store/actions';
 import { Navigate, useParams } from 'react-router-dom';
-import { AppCities, CityName, DefaultCity } from '../../const';
+import { AppCities, AppRoute, CityName } from '../../const';
 import { fetchOffers } from '../../store/api-actions';
 import Preloader from '../../components/preloader/preloader';
 
@@ -28,7 +28,7 @@ export default function MainPage(): React.ReactNode {
   }, [dispatch, city, allOffers]);
 
   if (!AppCities.includes(city as CityName)) {
-    return <Navigate to={`/${DefaultCity}`} />;
+    return <Navigate to={AppRoute.NotFound} />;
   }
 
   return (
