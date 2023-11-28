@@ -1,0 +1,12 @@
+.cities-notification {
+  background-color: tomato;
+  color: white;
+  border-radius: 5px;
+  padding: 20px 40px;
+  position: fixed;
+  z-index: 10;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
