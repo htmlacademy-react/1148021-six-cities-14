@@ -25,3 +25,9 @@ export type CityName = (typeof AppCities)[number];
 export const DefaultCity: CityName = 'Paris';
 
 export const TIMEOUT_SHOW_ERROR = 5000;
+
+export enum NameSpace {
+  Data = 'DATA',
+  Cities = 'CITIES',
+  User = 'USER',
+}

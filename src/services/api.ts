@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { StatusCodes } from 'http-status-codes';
 import { store } from '../store';
-import { setError } from '../store/actions';
 import { clearErrorAction } from '../store/api-actions';
 import { getToken } from './token';
+import { setError } from '../store/cities/cities.slice';
 
 type DetailMessageType = {
   error: string;

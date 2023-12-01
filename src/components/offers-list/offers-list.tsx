@@ -3,7 +3,8 @@ import PlaceCard, { TPlaceCard } from '../place-card/place-card';
 import Map from '../map/map';
 import OffersSorting from '../offers-sorting/offers-sorting';
 import { useAppDispatch } from '../../hooks';
-import { sortingActions } from '../../store/actions';
+import { sortOffers } from '../../store/cities/cities.slice';
+import { SortOptions } from '../offers-sorting/offers-sorting.types';
 
 type TOffersListProps = {
   offers: Array<TPlaceCard>;
@@ -26,7 +27,7 @@ export default function OffersList({ offers, city: cityName }: TOffersListProps)
         <b className="places__found">
           {offers.length} places to stay in {cityName}
         </b>
-        <OffersSorting onSortChange={(option) => dispatch(sortingActions[option]({ offers, name: option }))} />
+        <OffersSorting onSortChange={(option) => dispatch(sortOffers({ offers, option: option as SortOptions }))} />
         <div className="cities__places-list places__list tabs__content">
           {offers.map((offer) => (
             <PlaceCard key={offer.id} card={offer} section={'cities'} onCardHover={handleCardHover} />

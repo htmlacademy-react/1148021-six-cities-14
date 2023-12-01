@@ -3,23 +3,25 @@ import { Header } from '../../components/header/header';
 import OffersList from '../../components/offers-list/offers-list';
 import CitiesTabs from '../../components/cities-tabs/cities-tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { updateCity, updateCityOffers } from '../../store/actions';
 import { Navigate, useParams } from 'react-router-dom';
 import { AppCities, AppRoute, CityName } from '../../const';
-import { fetchOffers } from '../../store/api-actions';
+import { fetchOffersAction } from '../../store/api-actions';
 import Preloader from '../../components/preloader/preloader';
+import { getOffers } from '../../store/data/data.selectors';
+import { updateCity, updateCityOffers } from '../../store/cities/cities.slice';
+import { getCity, getCityOffers } from '../../store/cities/cities.selectors';
 
 export default function MainPage(): React.ReactNode {
   const { city } = useParams();
 
-  const activeCity = useAppSelector((state) => state.city);
-  const allOffers = useAppSelector((state) => state.offersList);
-  const cityOffers = useAppSelector((state) => state.cityOffers);
+  const activeCity = useAppSelector(getCity);
+  const allOffers = useAppSelector(getOffers);
+  const cityOffers = useAppSelector(getCityOffers);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchOffers());
+    dispatch(fetchOffersAction());
   }, []);
 
   useEffect(() => {

@@ -3,9 +3,10 @@ import classNames from 'classnames';
 import { useAppSelector } from '../../hooks';
 import { Link } from 'react-router-dom';
 import { AppCities } from '../../const';
+import { getCity } from '../../store/cities/cities.selectors';
 
 export default function CitiesTabs(): React.ReactNode {
-  const activeCity = useAppSelector((state) => state.city);
+  const activeCity = useAppSelector(getCity);
 
   const getLinkClasses = (city: typeof activeCity) =>
     classNames('locations__item-link', 'tabs__item', {

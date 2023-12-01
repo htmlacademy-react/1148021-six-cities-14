@@ -13,6 +13,7 @@ import { api } from '../../store';
 import Preloader from '../../components/preloader/preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRoute } from '../../store/actions';
+import { getAuthStatus } from '../../store/user/user.selectors';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
   return (
@@ -101,7 +102,7 @@ function BookmarkBtn({ isFavorite }: { isFavorite: TPlaceCard['isFavorite'] }): 
 }
 
 function OfferReviews(): ReactNode {
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
+  const authStatus = useAppSelector(getAuthStatus);
   const [reviews, setReviews] = useState<Array<TReview>>();
   const { id } = useParams();
 
