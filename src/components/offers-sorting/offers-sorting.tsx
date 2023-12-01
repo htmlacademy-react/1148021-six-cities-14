@@ -49,7 +49,9 @@ export default function OffersSorting({ onSortChange }: OffersSortingProps): Rea
               'places__option--active': option.name === searchParams.get(sortParamName),
             })}
             tabIndex={0}
-            onClick={() => handleChangeOption(option.name)}
+            onClick={
+              option.name !== searchParams.get(sortParamName) ? () => handleChangeOption(option.name) : undefined
+            }
           >
             {option.title}
           </li>
