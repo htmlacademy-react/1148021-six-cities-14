@@ -1,12 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useAppSelector } from '../../hooks';
-import { Link } from 'react-router-dom';
-import { AppCities } from '../../const';
+import { Link, useSearchParams } from 'react-router-dom';
+import { AppCities, sortBySearchParamName } from '../../const';
 import { getCity } from '../../store/cities/cities.selectors';
 
 export default function CitiesTabs(): React.ReactNode {
   const activeCity = useAppSelector(getCity);
+  const [searchParams] = useSearchParams();
+  const sortBy = searchParams.get(sortBySearchParamName);
 
   const getLinkClasses = (city: typeof activeCity) =>
     classNames('locations__item-link', 'tabs__item', {
@@ -24,7 +26,7 @@ export default function CitiesTabs(): React.ReactNode {
                   <span>{city}</span>
                 </a>
               ) : (
-                <Link className={getLinkClasses(city)} to={`/${city}`}>
+                <Link className={getLinkClasses(city)} to={`/${city}?${sortBySearchParamName}=${sortBy}`}>
                   <span>{city}</span>
                 </Link>
               )}

@@ -31,3 +31,5 @@ export enum NameSpace {
   Cities = 'CITIES',
   User = 'USER',
 }
+
+export const sortBySearchParamName = 'sortBy';

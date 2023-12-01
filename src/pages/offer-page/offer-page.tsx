@@ -129,7 +129,7 @@ function OfferReviews(): ReactNode {
           ))}
         </ul>
       )}
-      {authStatus === AuthStatus.Auth && <YourReviewForm onSubmit={(data) => handleReviewSubmit(data)} />}
+      {authStatus === AuthStatus.Auth && <YourReviewForm onSubmit={handleReviewSubmit} />}
     </section>
   );
 }
@@ -185,7 +185,7 @@ export default function OfferPage(): ReactNode {
       .get<Array<TPlaceCard>>(`/offers/${id}/nearby`)
       .then(({ data }) => setOffersNearby(data))
       .catch(() => setOffersNearby([]));
-  }, [id]);
+  }, [dispatch, id]);
 
   if (!id) {
     return <Navigate to={AppRoute.NotFound} />;

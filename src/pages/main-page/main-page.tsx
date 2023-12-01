@@ -3,16 +3,19 @@ import { Header } from '../../components/header/header';
 import OffersList from '../../components/offers-list/offers-list';
 import CitiesTabs from '../../components/cities-tabs/cities-tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { Navigate, useParams } from 'react-router-dom';
-import { AppCities, AppRoute, CityName } from '../../const';
+import { Navigate, useParams, useSearchParams } from 'react-router-dom';
+import { AppCities, AppRoute, CityName, sortBySearchParamName } from '../../const';
 import { fetchOffersAction } from '../../store/api-actions';
 import Preloader from '../../components/preloader/preloader';
 import { getOffers } from '../../store/data/data.selectors';
 import { updateCity, updateCityOffers } from '../../store/cities/cities.slice';
 import { getCity, getCityOffers } from '../../store/cities/cities.selectors';
+import { SortOptions } from '../../components/offers-sorting/offers-sorting.types';
 
 export default function MainPage(): React.ReactNode {
   const { city } = useParams();
+  const [searchParams] = useSearchParams();
+  const sortBy = (searchParams.get(sortBySearchParamName) as SortOptions) || SortOptions.Popular;
 
   const activeCity = useAppSelector(getCity);
   const allOffers = useAppSelector(getOffers);
@@ -22,12 +25,12 @@ export default function MainPage(): React.ReactNode {
 
   useEffect(() => {
     dispatch(fetchOffersAction());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(updateCity(city as CityName));
-    dispatch(updateCityOffers({ cityName: city as CityName, offers: allOffers || [] }));
-  }, [dispatch, city, allOffers]);
+    dispatch(updateCityOffers({ cityName: city as CityName, offers: allOffers || [], option: sortBy }));
+  }, [dispatch, city, allOffers, sortBy]);
 
   if (!AppCities.includes(city as CityName)) {
     return <Navigate to={AppRoute.NotFound} />;

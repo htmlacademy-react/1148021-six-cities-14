@@ -27,13 +27,13 @@ export const citiesSlice = createSlice({
     updateCity: (state, action: PayloadAction<CityName>) => {
       state.city = action.payload;
     },
-    updateCityOffers: (state, action: PayloadAction<{ offers: Array<TPlaceCard>; cityName: CityName }>) => {
-      const { offers, cityName } = action.payload;
-      state.cityOffers = offers.filter((offer) => offer.city.name === cityName);
-    },
-    sortOffers: (state, action: PayloadAction<{ offers: Array<TPlaceCard>; option: SortOptions }>) => {
-      const { offers, option } = action.payload;
-      state.cityOffers = offersSortFunctions[option](offers);
+    updateCityOffers: (
+      state,
+      action: PayloadAction<{ offers: Array<TPlaceCard>; cityName: CityName; option: SortOptions }>
+    ) => {
+      const { offers, cityName, option } = action.payload;
+      const cityOffers = offers.filter((offer) => offer.city.name === cityName);
+      state.cityOffers = offersSortFunctions[option](cityOffers);
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
@@ -41,4 +41,4 @@ export const citiesSlice = createSlice({
   },
 });
 
-export const { updateCity, updateCityOffers, sortOffers, setError } = citiesSlice.actions;
+export const { updateCity, updateCityOffers, setError } = citiesSlice.actions;
