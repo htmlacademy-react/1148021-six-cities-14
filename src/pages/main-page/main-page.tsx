@@ -12,6 +12,22 @@ import { updateCity, updateCityOffers } from '../../store/cities/cities.slice';
 import { getCity, getCityOffers } from '../../store/cities/cities.selectors';
 import { SortOptions } from '../../components/offers-sorting/offers-sorting.types';
 
+function EmptyOffersBlock({ activeCity }: { activeCity: CityName | null }): React.ReactNode {
+  return (
+    <>
+      <section className="cities__no-places">
+        <div className="cities__status-wrapper tabs__content">
+          <b className="cities__status">No places to stay available</b>
+          <p className="cities__status-description">
+            We could not find any property available at the moment in {activeCity}
+          </p>
+        </div>
+      </section>
+      <div className="cities__right-section" />
+    </>
+  );
+}
+
 export default function MainPage(): React.ReactNode {
   const { city } = useParams();
   const [searchParams] = useSearchParams();
@@ -49,21 +65,7 @@ export default function MainPage(): React.ReactNode {
             <OffersList offers={cityOffers} city={activeCity as CityName} />
           ) : (
             <div className="cities__places-container cities__places-container--empty container">
-              {!allOffers ? (
-                <Preloader />
-              ) : (
-                <>
-                  <section className="cities__no-places">
-                    <div className="cities__status-wrapper tabs__content">
-                      <b className="cities__status">No places to stay available</b>
-                      <p className="cities__status-description">
-                        We could not find any property available at the moment in {activeCity}
-                      </p>
-                    </div>
-                  </section>
-                  <div className="cities__right-section" />
-                </>
-              )}
+              {!allOffers ? <Preloader /> : <EmptyOffersBlock activeCity={activeCity} />}
             </div>
           )}
         </div>
