@@ -7,18 +7,13 @@ import OfferPage from '../../pages/offer-page/offer-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import { PrivateRoute } from '../private-route/private-route';
 import { HelmetProvider } from 'react-helmet-async';
-import { TPlaceCard } from '../place-card/place-card';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
 import browserHistory from '../../browser-history';
 import HistoryRouter from '../history-route/history-route';
 import Notification from '../notification/notification';
 
-type AppProps = {
-  favorites: Array<TPlaceCard>;
-};
-
-export default function App({ favorites }: AppProps): React.ReactNode {
+export default function App(): React.ReactNode {
   return (
     <Provider store={store}>
       <HelmetProvider>
@@ -33,7 +28,7 @@ export default function App({ favorites }: AppProps): React.ReactNode {
               path={AppRoute.Favorites}
               element={
                 <PrivateRoute>
-                  <FavoritesPage favorites={favorites} />
+                  <FavoritesPage />
                 </PrivateRoute>
               }
             />

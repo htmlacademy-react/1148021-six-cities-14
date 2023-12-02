@@ -1,7 +1,6 @@
 import { Header } from '../../components/header/header';
 import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
 import Review, { TReview } from '../../components/review/review';
-import classNames from 'classnames';
 import { Helmet } from 'react-helmet-async';
 import { AppRoute, AppTitle, AuthStatus } from '../../const';
 import YourReviewForm, { ReviewRequestData } from '../../components/your-review-form/your-review-form';
@@ -12,8 +11,9 @@ import { ReactNode, useEffect, useState } from 'react';
 import { api } from '../../store';
 import Preloader from '../../components/preloader/preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { redirectToRoute } from '../../store/actions';
+import { redirectToRouteAction } from '../../store/actions';
 import { getAuthStatus } from '../../store/user/user.selectors';
+import BookmarkBtn from '../../components/bookmark-btn/bookmark-btn';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
   return (
@@ -87,20 +87,6 @@ function OfferHost({
   );
 }
 
-function BookmarkBtn({ isFavorite }: { isFavorite: TPlaceCard['isFavorite'] }): ReactNode {
-  return (
-    <button
-      className={classNames('offer__bookmark-button', { 'offer__bookmark-button--active': isFavorite }, 'button')}
-      type="button"
-    >
-      <svg className="offer__bookmark-icon" width={31} height={33}>
-        <use xlinkHref="#icon-bookmark" />
-      </svg>
-      <span className="visually-hidden">{isFavorite ? 'In' : 'To'} bookmarks</span>
-    </button>
-  );
-}
-
 function OfferReviews(): ReactNode {
   const authStatus = useAppSelector(getAuthStatus);
   const [reviews, setReviews] = useState<Array<TReview>>();
@@ -120,15 +106,15 @@ function OfferReviews(): ReactNode {
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">
-        Reviews · <span className="reviews__amount">{reviews?.length || 0}</span>
+        Reviews · {reviews?.length ? <span className="reviews__amount">{reviews.length}</span> : 'No reviews yet'}
       </h2>
-      {reviews?.length && (
+      {reviews?.length ? (
         <ul className="reviews__list">
           {reviews.map((review) => (
             <Review review={review} key={review.id} />
           ))}
         </ul>
-      )}
+      ) : null}
       {authStatus === AuthStatus.Auth && <YourReviewForm onSubmit={handleReviewSubmit} />}
     </section>
   );
@@ -179,7 +165,7 @@ export default function OfferPage(): ReactNode {
     api
       .get<TPlaceCard>(`/offers/${id}`)
       .then(({ data }) => setOffer(data))
-      .catch(() => dispatch(redirectToRoute(AppRoute.NotFound)));
+      .catch(() => dispatch(redirectToRouteAction(AppRoute.NotFound)));
 
     api
       .get<Array<TPlaceCard>>(`/offers/${id}/nearby`)
@@ -215,7 +201,7 @@ export default function OfferPage(): ReactNode {
                 )}
                 <div className="offer__name-wrapper">
                   <h1 className="offer__name">{offer.title}</h1>
-                  <BookmarkBtn isFavorite={offer.isFavorite} />
+                  <BookmarkBtn offerId={offer.id} isFavorite={offer.isFavorite} section="offer" size="big" />
                 </div>
                 <StarsRating rating={offer.rating} cssPrefix="offer" showValue />
                 <OfferFeatures offer={offer} />

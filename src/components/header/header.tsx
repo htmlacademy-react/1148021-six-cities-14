@@ -5,9 +5,11 @@ import LogoLink from '../logo-link/logo-link';
 import { logoutAction } from '../../store/api-actions';
 import { MouseEvent } from 'react';
 import { getAuthStatus, getUserData } from '../../store/user/user.selectors';
+import { getFavoritesCount } from '../../store/data/data.selectors';
 
 export function Header(): React.ReactNode {
   const authStatus = useAppSelector(getAuthStatus);
+  const favsCount = useAppSelector(getFavoritesCount);
   const userData = useAppSelector(getUserData);
 
   const dispatch = useAppDispatch();
@@ -38,7 +40,7 @@ export function Header(): React.ReactNode {
                   {authStatus === AuthStatus.Auth ? (
                     <>
                       <span className="header__user-name user__name">{userData?.name}</span>
-                      <span className="header__favorite-count">3</span>
+                      {favsCount ? <span className="header__favorite-count">{favsCount}</span> : null}
                     </>
                   ) : (
                     <span className="header__login">Sign in</span>

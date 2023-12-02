@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { AppRoute, CityName } from '../../const';
 import StarsRating from '../stars-rating/stars-rating';
+import BookmarkBtn from '../bookmark-btn/bookmark-btn';
 
 export type TPlaceCard = {
   bedrooms: number;
@@ -44,15 +45,20 @@ type TPlaceCardProps = {
   card: TPlaceCard;
   section: 'cities' | 'favorites';
   onCardHover?: (id: TPlaceCard['id'] | null) => void;
+  onCardDelete?: (id: TPlaceCard['id']) => void;
 };
 
-export default function PlaceCard({ card, section, onCardHover }: TPlaceCardProps): React.ReactNode {
+export default function PlaceCard({ card, section, onCardHover, onCardDelete }: TPlaceCardProps): React.ReactNode {
   const handleMouseEnter = () => {
     onCardHover?.(card.id);
   };
 
   const handleMouseLeave = () => {
     onCardHover?.(null);
+  };
+
+  const handleBookmarkDelete = () => {
+    onCardDelete?.(card.id);
   };
 
   return (
@@ -80,19 +86,11 @@ export default function PlaceCard({ card, section, onCardHover }: TPlaceCardProp
             <b className="place-card__price-value">€{card.price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <button
-            className={classNames(
-              'place-card__bookmark-button',
-              { 'place-card__bookmark-button--active': card.isFavorite },
-              'button'
-            )}
-            type="button"
-          >
-            <svg className="place-card__bookmark-icon" width={18} height={19}>
-              <use xlinkHref="#icon-bookmark" />
-            </svg>
-            <span className="visually-hidden">{card.isFavorite ? 'In' : 'To'} bookmarks</span>
-          </button>
+          <BookmarkBtn
+            offerId={card.id}
+            isFavorite={card.isFavorite}
+            {...(onCardDelete ? { onBookmarkDelete: handleBookmarkDelete } : {})}
+          />
         </div>
         <StarsRating rating={card.rating} cssPrefix="place-card" />
         <h2 className="place-card__name">
