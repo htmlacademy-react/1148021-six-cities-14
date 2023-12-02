@@ -11,6 +11,8 @@ export type State = {
   userData: UserData | null;
 };
 
+export type AppState = ReturnType<typeof store.getState>;
+
 export type AppDispatch = typeof store.dispatch;
 
 export type AuthData = {

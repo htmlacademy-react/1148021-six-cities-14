@@ -13,6 +13,7 @@ import { api } from '../../store';
 import Preloader from '../../components/preloader/preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRoute } from '../../store/actions';
+import { getAuthStatus } from '../../store/user/user.selectors';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
   return (
@@ -100,7 +101,22 @@ function BookmarkBtn({ isFavorite }: { isFavorite: TPlaceCard['isFavorite'] }): 
   );
 }
 
-function OfferReviews({ reviews, children }: { reviews: Array<TReview> | undefined; children: ReactNode }): ReactNode {
+function OfferReviews(): ReactNode {
+  const authStatus = useAppSelector(getAuthStatus);
+  const [reviews, setReviews] = useState<Array<TReview>>();
+  const { id } = useParams();
+
+  const handleReviewSubmit = (requestData: ReviewRequestData) => {
+    api.post<Array<TReview>>(`/comments/${id}`, requestData).then(({ data }) => setReviews(data));
+  };
+
+  useEffect(() => {
+    api
+      .get<Array<TReview>>(`/comments/${id}`)
+      .then(({ data }) => setReviews(data))
+      .catch(() => setReviews([]));
+  }, [id]);
+
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">
@@ -113,7 +129,7 @@ function OfferReviews({ reviews, children }: { reviews: Array<TReview> | undefin
           ))}
         </ul>
       )}
-      {children}
+      {authStatus === AuthStatus.Auth && <YourReviewForm onSubmit={handleReviewSubmit} />}
     </section>
   );
 }
@@ -139,13 +155,12 @@ function OfferNearby({ offersNearby }: { offersNearby?: Array<TPlaceCard> }): Re
 
 export default function OfferPage(): ReactNode {
   const [offer, setOffer] = useState<TPlaceCard>();
-  const [reviews, setReviews] = useState<Array<TReview>>();
+
   const [offersNearby, setOffersNearby] = useState<Array<TPlaceCard>>();
 
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
 
   const getCurPointForMap = (curOffer: TPlaceCard): TPoint => [curOffer.location.latitude, curOffer.location.longitude];
 
@@ -160,10 +175,6 @@ export default function OfferPage(): ReactNode {
     ];
   };
 
-  const handleReviewSubmit = (requestData: ReviewRequestData) => {
-    api.post<Array<TReview>>(`/comments/${id}`, requestData).then(({ data }) => setReviews(data));
-  };
-
   useEffect(() => {
     api
       .get<TPlaceCard>(`/offers/${id}`)
@@ -171,15 +182,10 @@ export default function OfferPage(): ReactNode {
       .catch(() => dispatch(redirectToRoute(AppRoute.NotFound)));
 
     api
-      .get<Array<TReview>>(`/comments/${id}`)
-      .then(({ data }) => setReviews(data))
-      .catch(() => setReviews([]));
-
-    api
       .get<Array<TPlaceCard>>(`/offers/${id}/nearby`)
       .then(({ data }) => setOffersNearby(data))
       .catch(() => setOffersNearby([]));
-  }, [id]);
+  }, [dispatch, id]);
 
   if (!id) {
     return <Navigate to={AppRoute.NotFound} />;
@@ -216,9 +222,7 @@ export default function OfferPage(): ReactNode {
                 <OfferPrice price={offer.price} />
                 <OfferInside goods={offer.goods} />
                 <OfferHost host={offer.host} description={offer.description} />
-                <OfferReviews reviews={reviews}>
-                  {authStatus === AuthStatus.Auth && <YourReviewForm onSubmit={(data) => handleReviewSubmit(data)} />}
-                </OfferReviews>
+                <OfferReviews />
               </div>
             </div>
             <Map

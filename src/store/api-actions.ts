@@ -1,22 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AppDispatch, AuthData, State, UserData } from './store.types';
+import { AppDispatch, AuthData, AppState, UserData } from './store.types';
 import { AxiosInstance } from 'axios';
 import { TPlaceCard } from '../components/place-card/place-card';
-import { loadOffers, redirectToRoute, requireAuthorization, setError, setUserData } from './actions';
-import { AppRoute, AuthStatus, TIMEOUT_SHOW_ERROR } from '../const';
+import { redirectToRoute } from './actions';
+import { AppRoute, TIMEOUT_SHOW_ERROR } from '../const';
 import { dropToken, saveToken } from '../services/token';
+import { setError } from './cities/cities.slice';
 
-export const fetchOffers = createAsyncThunk<
-  void,
+export const fetchOffersAction = createAsyncThunk<
+  Array<TPlaceCard>,
   undefined,
   {
     dispatch: AppDispatch;
-    state: State;
+    state: AppState;
     extra: AxiosInstance;
   }
->('cities/data/fetchOffers', async (_arg, { dispatch, extra: api }) => {
-  const { data } = await api.get<Array<TPlaceCard>>('/offers').catch(() => ({ data: [] }));
-  dispatch(loadOffers(data));
+>('DATA/fetchOffers', async (_arg, { extra: api }) => {
+  const { data } = await api.get<Array<TPlaceCard>>('/offers');
+  return data;
 });
 
 export const clearErrorAction = createAsyncThunk<
@@ -30,37 +31,31 @@ export const clearErrorAction = createAsyncThunk<
 });
 
 export const checkAuthAction = createAsyncThunk<
-  void,
+  UserData,
   undefined,
   {
     dispatch: AppDispatch;
-    state: State;
+    state: AppState;
     extra: AxiosInstance;
   }
->('cities/user/checkAuth', async (_arg, { dispatch, extra: api }) => {
-  try {
-    const { data } = await api.get<UserData>('/login');
-    dispatch(setUserData(data));
-    dispatch(requireAuthorization(AuthStatus.Auth));
-  } catch {
-    dispatch(requireAuthorization(AuthStatus.NoAuth));
-  }
+>('user/checkAuth', async (_arg, { extra: api }) => {
+  const { data } = await api.get<UserData>('/login');
+  return data;
 });
 
 export const loginAction = createAsyncThunk<
-  void,
+  UserData,
   AuthData,
   {
     dispatch: AppDispatch;
-    state: State;
+    state: AppState;
     extra: AxiosInstance;
   }
->('cities/user/login', async ({ login: email, password }, { dispatch, extra: api }) => {
+>('USER/login', async ({ login: email, password }, { dispatch, extra: api }) => {
   const { data } = await api.post<UserData>('/login', { email, password });
   saveToken(data.token);
-  dispatch(setUserData(data));
-  dispatch(requireAuthorization(AuthStatus.Auth));
   dispatch(redirectToRoute(AppRoute.Main));
+  return data;
 });
 
 export const logoutAction = createAsyncThunk<
@@ -68,12 +63,10 @@ export const logoutAction = createAsyncThunk<
   undefined,
   {
     dispatch: AppDispatch;
-    state: State;
+    state: AppState;
     extra: AxiosInstance;
   }
->('user/logout', async (_arg, { dispatch, extra: api }) => {
+>('USER/logout', async (_arg, { extra: api }) => {
   await api.delete('/logout');
   dropToken();
-  dispatch(setUserData(null));
-  dispatch(requireAuthorization(AuthStatus.NoAuth));
 });

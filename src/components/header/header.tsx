@@ -4,10 +4,11 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import LogoLink from '../logo-link/logo-link';
 import { logoutAction } from '../../store/api-actions';
 import { MouseEvent } from 'react';
+import { getAuthStatus, getUserData } from '../../store/user/user.selectors';
 
 export function Header(): React.ReactNode {
-  const authStatus = useAppSelector((state) => state.authorizationStatus);
-  const userData = useAppSelector((state) => state.userData);
+  const authStatus = useAppSelector(getAuthStatus);
+  const userData = useAppSelector(getUserData);
 
   const dispatch = useAppDispatch();
 

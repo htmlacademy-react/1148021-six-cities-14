@@ -1,11 +1,19 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useAppSelector } from '../../hooks';
-import { Link } from 'react-router-dom';
-import { AppCities } from '../../const';
+import { Link, useSearchParams } from 'react-router-dom';
+import { AppCities, sortBySearchParamName } from '../../const';
+import { getCity } from '../../store/cities/cities.selectors';
 
 export default function CitiesTabs(): React.ReactNode {
-  const activeCity = useAppSelector((state) => state.city);
+  const activeCity = useAppSelector(getCity);
+  const [searchParams] = useSearchParams();
+  const sortBy = searchParams.get(sortBySearchParamName);
+
+  const getLinkClasses = (city: typeof activeCity) =>
+    classNames('locations__item-link', 'tabs__item', {
+      'tabs__item--active': activeCity === city,
+    });
 
   return (
     <div className="tabs">
@@ -13,14 +21,15 @@ export default function CitiesTabs(): React.ReactNode {
         <ul className="locations__list tabs__list">
           {AppCities.map((city) => (
             <li className="locations__item" key={city}>
-              <Link
-                className={classNames('locations__item-link', 'tabs__item', {
-                  'tabs__item--active': activeCity === city,
-                })}
-                to={`/${city}`}
-              >
-                <span>{city}</span>
-              </Link>
+              {activeCity === city ? (
+                <a className={getLinkClasses(city)}>
+                  <span>{city}</span>
+                </a>
+              ) : (
+                <Link className={getLinkClasses(city)} to={`/${city}?${sortBySearchParamName}=${sortBy}`}>
+                  <span>{city}</span>
+                </Link>
+              )}
             </li>
           ))}
         </ul>
