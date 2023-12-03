@@ -1,5 +1,5 @@
 import { store } from '.';
-import { TPlaceCard } from '../components/place-card/place-card';
+import { TPlaceCard } from '../components/place-card/place-card.types';
 import { AuthStatus, CityName } from '../const';
 
 export type State = {

@@ -1,11 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 import LogoLink from '../../components/logo-link/logo-link';
-import { AppTitle } from '../../const';
-import { FormEvent, useRef } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { APP_TITLE, AppRoute, DEFAULT_CITY } from '../../const';
+import React, { FormEvent, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
+import { getIsAuthorized } from '../../store/user/user.selectors';
+import { Link, Navigate } from 'react-router-dom';
 
-export default function LoginPage(): React.ReactNode {
+function LoginPage(): React.ReactNode {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
@@ -27,7 +29,7 @@ export default function LoginPage(): React.ReactNode {
   return (
     <div className="page page--gray page--login">
       <Helmet>
-        <title>{AppTitle} - Login</title>
+        <title>{APP_TITLE} - Login</title>
       </Helmet>
       <header className="header">
         <div className="container">
@@ -72,13 +74,17 @@ export default function LoginPage(): React.ReactNode {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link className="locations__item-link" to={`/${DEFAULT_CITY}`}>
+                <span>{DEFAULT_CITY}</span>
+              </Link>
             </div>
           </section>
         </div>
       </main>
     </div>
   );
+}
+
+export default function LoginWithAuthCheckPage(): React.ReactNode {
+  return useAppSelector(getIsAuthorized) ? <Navigate to={AppRoute.Main} /> : <LoginPage />;
 }

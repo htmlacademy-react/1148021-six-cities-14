@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { TPlaceCard } from '../place-card/place-card';
 import { api } from '../../store';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -8,6 +7,7 @@ import { getCityOffers } from '../../store/cities/cities.selectors';
 import { updateCityOffers } from '../../store/cities/cities.slice';
 import { redirectToRouteAction } from '../../store/actions';
 import { AppRoute } from '../../const';
+import { TPlaceCard } from '../place-card/place-card.types';
 
 type BookmarkBtnProps = {
   offerId: TPlaceCard['id'];

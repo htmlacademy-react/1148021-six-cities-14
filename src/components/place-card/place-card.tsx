@@ -1,45 +1,9 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { AppRoute, CityName } from '../../const';
+import { AppRoute } from '../../const';
 import StarsRating from '../stars-rating/stars-rating';
 import BookmarkBtn from '../bookmark-btn/bookmark-btn';
-
-export type TPlaceCard = {
-  bedrooms: number;
-  city: TCity;
-  description: string;
-  goods: string[];
-  host: THost;
-  id: number;
-  images: string[];
-  isFavorite: boolean;
-  isPremium: boolean;
-  location: TLocation;
-  maxAdults: number;
-  previewImage: string;
-  price: number;
-  rating: number;
-  title: string;
-  type: string;
-};
-
-export type TCity = {
-  location: TLocation;
-  name: CityName;
-};
-
-type TLocation = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-};
-
-type THost = {
-  avatarUrl: string;
-  id: number;
-  isPro: boolean;
-  name: string;
-};
+import { TPlaceCard } from './place-card.types';
 
 type TPlaceCardProps = {
   card: TPlaceCard;

@@ -1,19 +1,23 @@
 import { Header } from '../../components/header/header';
-import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
-import Review, { TReview } from '../../components/review/review';
+import PlaceCard from '../../components/place-card/place-card';
+import Review from '../../components/review/review';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, AppTitle, AuthStatus } from '../../const';
-import YourReviewForm, { ReviewRequestData } from '../../components/your-review-form/your-review-form';
+import { AppRoute, APP_TITLE } from '../../const';
+import YourReviewForm from '../../components/your-review-form/your-review-form';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
-import Map, { TPoint } from '../../components/map/map';
+import Map from '../../components/map/map';
 import { ReactNode, useEffect, useState } from 'react';
 import { api } from '../../store';
 import Preloader from '../../components/preloader/preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRouteAction } from '../../store/actions';
-import { getAuthStatus } from '../../store/user/user.selectors';
+import { getIsAuthorized } from '../../store/user/user.selectors';
 import BookmarkBtn from '../../components/bookmark-btn/bookmark-btn';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
+import { TReview } from '../../components/review/review.types';
+import { ReviewRequestData } from '../../components/your-review-form/your-review-form.types';
+import { TPoint } from '../../components/map/map.types';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
   return (
@@ -88,7 +92,7 @@ function OfferHost({
 }
 
 function OfferReviews(): ReactNode {
-  const authStatus = useAppSelector(getAuthStatus);
+  const isAuthorized = useAppSelector(getIsAuthorized);
   const [reviews, setReviews] = useState<Array<TReview>>();
   const { id } = useParams();
 
@@ -115,7 +119,7 @@ function OfferReviews(): ReactNode {
           ))}
         </ul>
       ) : null}
-      {authStatus === AuthStatus.Auth && <YourReviewForm onSubmit={handleReviewSubmit} />}
+      {isAuthorized && <YourReviewForm onSubmit={handleReviewSubmit} />}
     </section>
   );
 }
@@ -180,7 +184,7 @@ export default function OfferPage(): ReactNode {
   return (
     <div className="page">
       <Helmet>
-        <title>{AppTitle} - PlaceCard</title>
+        <title>{APP_TITLE} - PlaceCard</title>
       </Helmet>
 
       <Header />

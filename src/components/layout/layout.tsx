@@ -1,27 +1,22 @@
 import { Outlet } from 'react-router-dom';
-import { Header } from '../header/header';
-import { useAppSelector } from '../../hooks';
-import { getAuthCheckedStatus } from '../../store/user/user.selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getAuthCheckedStatus, getIsAuthorized } from '../../store/user/user.selectors';
 import Preloader from '../preloader/preloader';
-import classNames from 'classnames';
+import { useEffect } from 'react';
+import { fetchFavoritesAction } from '../../store/api-actions';
 
-// без него проще выходит, но может потом пригодится
 function Layout() {
   const isCheckedAuth = useAppSelector(getAuthCheckedStatus);
-  const pageClasses = classNames(
-    'page'
-    // {'page--gray': isMain},
-    // {'page--main': isMain},
-    // {'page--favorites-empty': isFav && isFaveEmpty},
-  );
+  const isAuthorized = useAppSelector(getIsAuthorized);
+  const dispatch = useAppDispatch();
 
-  return (
-    <div className={pageClasses}>
-      <Header />
+  useEffect(() => {
+    if (isAuthorized) {
+      dispatch(fetchFavoritesAction());
+    }
+  }, [dispatch, isAuthorized]);
 
-      {isCheckedAuth ? <Outlet /> : <Preloader />}
-    </div>
-  );
+  return isCheckedAuth ? <Outlet /> : <Preloader />;
 }
 
 export default Layout;

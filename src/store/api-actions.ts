@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, AuthData, AppState, UserData } from './store.types';
 import { AxiosInstance } from 'axios';
-import { TPlaceCard } from '../components/place-card/place-card';
 import { redirectToRouteAction } from './actions';
 import { AppRoute, TIMEOUT_SHOW_ERROR } from '../const';
 import { dropToken, saveToken } from '../services/token';
 import { setError } from './cities/cities.slice';
+import { TPlaceCard } from '../components/place-card/place-card.types';
 
 export const fetchFavoritesAction = createAsyncThunk<
   Array<TPlaceCard>,

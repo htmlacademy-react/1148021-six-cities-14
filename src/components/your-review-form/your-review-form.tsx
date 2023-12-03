@@ -1,9 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-
-export type ReviewRequestData = {
-  comment: string;
-  rating: number;
-};
+import { ReviewRequestData } from './your-review-form.types';
 
 type YourReviewFormProps = {
   onSubmit: (data: ReviewRequestData) => void;
@@ -18,32 +14,38 @@ export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React
     { count: 1, title: '' },
   ] as const;
   const reviewMinLength = 50;
+  const reviewMaxLength = 300;
 
   const initialFormData = { rating: 0, review: '' };
 
-  const [formData, setFormData] = useState<{
-    rating: number;
-    review: string;
-  }>(initialFormData);
-
+  const [formData, setFormData] = useState<typeof initialFormData>(initialFormData);
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const handleFormFieldChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const handleCommentFieldChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleRatingFieldChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: +value });
+  };
+
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> | undefined = (event) => {
     event.preventDefault();
     onSubmit({ comment: formData.review, rating: formData.rating });
-    setFormData(initialFormData); // todo: reset stars
+    setFormData(initialFormData);
   };
 
   useEffect(() => {
     setIsFormValid(
-      Object.values(formData).reduce((prev, curr) => prev && !!curr, true) && formData.review.length >= reviewMinLength
+      Object.values(formData).reduce((prev, curr) => prev && !!curr, true) &&
+        formData.review.length >= reviewMinLength &&
+        formData.review.length <= reviewMaxLength
     );
   }, [formData]);
 
@@ -62,7 +64,8 @@ export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React
               id={`${count}-stars`}
               type="radio"
               value={count}
-              onChange={handleFormFieldChange}
+              checked={count === formData.rating}
+              onChange={handleRatingFieldChange}
             />
             <label htmlFor={`${count}-stars`} className="reviews__rating-label form__rating-label" title={title}>
               <svg className="form__star-image" width={37} height={33}>
@@ -79,7 +82,7 @@ export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formData.review}
-        onChange={handleFormFieldChange}
+        onChange={handleCommentFieldChange}
       />
 
       <div className="reviews__button-wrapper">

@@ -1,12 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
-import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
-import { AppTitle } from '../../const';
+import PlaceCard from '../../components/place-card/place-card';
+import { APP_TITLE } from '../../const';
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Preloader from '../../components/preloader/preloader';
 import { api } from '../../store';
 import { Header } from '../../components/header/header';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
+import { Link } from 'react-router-dom';
 
 function FavoritesEmptyBlock(): React.ReactNode {
   return (
@@ -53,7 +55,7 @@ export default function FavoritesPage(): React.ReactNode {
   return (
     <div className={classNames('page', { 'page--favorites-empty': isFavsEmpty })}>
       <Helmet>
-        <title>{AppTitle} - Favorites</title>
+        <title>{APP_TITLE} - Favorites</title>
       </Helmet>
 
       <Header />
@@ -76,9 +78,9 @@ export default function FavoritesPage(): React.ReactNode {
                       <li className="favorites__locations-items" key={city}>
                         <div className="favorites__locations locations locations--current">
                           <div className="locations__item">
-                            <a className="locations__item-link" href="#">
+                            <Link className="locations__item-link" to={`/${city}`}>
                               <span>{city}</span>
-                            </a>
+                            </Link>
                           </div>
                         </div>
                         <div className="favorites__places">

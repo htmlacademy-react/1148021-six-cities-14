@@ -6,7 +6,7 @@ export enum AppRoute {
   NotFound = '/404',
 }
 
-export const AppTitle = '6 cities';
+export const APP_TITLE = '6 cities';
 
 export enum AuthStatus {
   Auth = 'AUTH',
@@ -20,9 +20,9 @@ export const URL_MARKER_DEFAULT =
 export const URL_MARKER_CURRENT =
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
 
-export const AppCities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
-export type CityName = (typeof AppCities)[number];
-export const DefaultCity: CityName = 'Paris';
+export const APP_CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
+export type CityName = (typeof APP_CITIES)[number];
+export const DEFAULT_CITY: CityName = 'Paris';
 
 export const TIMEOUT_SHOW_ERROR = 5000;
 
@@ -32,4 +32,4 @@ export enum NameSpace {
   User = 'USER',
 }
 
-export const sortBySearchParamName = 'sortBy';
+export const SORT_BY_SEARCH_PARAM_NAME = 'sortBy';

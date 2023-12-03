@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 import useMap from '../../hooks/use-map';
-import { TCity } from '../place-card/place-card';
 import 'leaflet/dist/leaflet.css';
 import { Icon, Marker, layerGroup } from 'leaflet';
 import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
-
-export type TPoint = [number, number];
+import { TCity } from '../place-card/place-card.types';
+import { TPoint } from './map.types';
 
 type MapProps = {
   city: TCity;

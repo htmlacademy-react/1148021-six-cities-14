@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import PlaceCard, { TPlaceCard } from '../place-card/place-card';
+import PlaceCard from '../place-card/place-card';
 import Map from '../map/map';
 import OffersSorting from '../offers-sorting/offers-sorting';
 import { useAppDispatch } from '../../hooks';
 import { updateCityOffers } from '../../store/cities/cities.slice';
 import { SortOptions } from '../offers-sorting/offers-sorting.types';
 import { CityName } from '../../const';
+import { TPlaceCard } from '../place-card/place-card.types';
 
 type TOffersListProps = {
   offers: Array<TPlaceCard>;

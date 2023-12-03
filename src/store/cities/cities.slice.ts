@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { TPlaceCard } from '../../components/place-card/place-card';
 import { CityName, NameSpace } from '../../const';
 import { SortOptions } from '../../components/offers-sorting/offers-sorting.types';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
 
 const initialState: {
   city: CityName | null;

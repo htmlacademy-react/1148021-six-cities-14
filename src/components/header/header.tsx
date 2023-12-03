@@ -1,14 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import { AppRoute, AuthStatus } from '../../const';
+import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import LogoLink from '../logo-link/logo-link';
 import { logoutAction } from '../../store/api-actions';
 import { MouseEvent } from 'react';
-import { getAuthStatus, getUserData } from '../../store/user/user.selectors';
+import { getIsAuthorized, getUserData } from '../../store/user/user.selectors';
 import { getFavoritesCount } from '../../store/data/data.selectors';
 
 export function Header(): React.ReactNode {
-  const authStatus = useAppSelector(getAuthStatus);
+  const isAuthorized = useAppSelector(getIsAuthorized);
   const favsCount = useAppSelector(getFavoritesCount);
   const userData = useAppSelector(getUserData);
 
@@ -37,7 +37,7 @@ export function Header(): React.ReactNode {
                   >
                     {/* prettier-ignore */}
                   </div>
-                  {authStatus === AuthStatus.Auth ? (
+                  {isAuthorized ? (
                     <>
                       <span className="header__user-name user__name">{userData?.name}</span>
                       {favsCount ? <span className="header__favorite-count">{favsCount}</span> : null}
@@ -48,7 +48,7 @@ export function Header(): React.ReactNode {
                 </NavLink>
               </li>
 
-              {authStatus === AuthStatus.Auth && (
+              {isAuthorized && (
                 <li className="header__nav-item">
                   <a className="header__nav-link" href="#" onClick={handleLogoutClick}>
                     <span className="header__signout">Sign out</span>
