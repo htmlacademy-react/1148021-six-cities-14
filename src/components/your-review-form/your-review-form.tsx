@@ -1,11 +1,14 @@
 import { Fragment, useEffect, useState } from 'react';
-import { ReviewRequestData } from './your-review-form.types';
+import { api } from '../../store';
+import { TReview } from '../review/review.types';
+import { TPlaceCard } from '../place-card/place-card.types';
 
 type YourReviewFormProps = {
-  onSubmit: (data: ReviewRequestData) => void;
+  offerId: TPlaceCard['id'];
+  onSubmitSuccess: (reviews: Array<TReview>) => void;
 };
 
-export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React.ReactNode {
+export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewFormProps): React.ReactNode {
   const stars = [
     { count: 5, title: 'perfect' },
     { count: 4, title: 'good' },
@@ -37,8 +40,12 @@ export default function YourReviewForm({ onSubmit }: YourReviewFormProps): React
 
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> | undefined = (event) => {
     event.preventDefault();
-    onSubmit({ comment: formData.review, rating: formData.rating });
-    setFormData(initialFormData);
+    const requestData = { comment: formData.review, rating: formData.rating };
+    // todo : block form
+    api.post<Array<TReview>>(`/comments/${offerId}`, requestData).then(({ data }) => {
+      setFormData(initialFormData);
+      onSubmitSuccess(data);
+    });
   };
 
   useEffect(() => {

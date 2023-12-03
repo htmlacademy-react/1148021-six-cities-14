@@ -1,17 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 import LogoLink from '../../components/logo-link/logo-link';
-import { APP_TITLE, AppRoute, DEFAULT_CITY } from '../../const';
+import { APP_TITLE, AppRoute } from '../../const';
 import React, { FormEvent, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/api-actions';
 import { getIsAuthorized } from '../../store/user/user.selectors';
 import { Link, Navigate } from 'react-router-dom';
+import { getRandomCity } from '../../utils/utils';
 
 function LoginPage(): React.ReactNode {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const dispatch = useAppDispatch();
+
+  const randomCity = getRandomCity();
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -74,8 +77,8 @@ function LoginPage(): React.ReactNode {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={`/${DEFAULT_CITY}`}>
-                <span>{DEFAULT_CITY}</span>
+              <Link className="locations__item-link" to={`/${randomCity}`}>
+                <span>{randomCity}</span>
               </Link>
             </div>
           </section>
