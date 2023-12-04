@@ -1,8 +1,13 @@
+import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { TPlaceCard } from '../components/place-card/place-card.types';
-import { CityName } from '../const';
-import { AuthData, UserData } from '../store/store.types';
+import { AuthStatus, CityName, NameSpace } from '../const';
+import { AppState, AuthData, UserData } from '../store/store.types';
+import { createAPI } from '../services/api';
+import MockAdapter from 'axios-mock-adapter';
+import thunk from 'redux-thunk';
+import { configureMockStore } from '@jedmao/redux-mock-store';
 
-export const makeMockOffer = (): TPlaceCard => ({
+export const makeMockOffer = (id?: TPlaceCard['id']): TPlaceCard => ({
   city: {
     name: CityName.Amsterdam,
     location: {
@@ -45,11 +50,11 @@ export const makeMockOffer = (): TPlaceCard => ({
     longitude: 2.357499,
     zoom: 16,
   },
-  id: 1,
+  id: id || 1,
 });
 
-export const makeMockOfferForCity = (cityName: CityName): TPlaceCard => {
-  const offer = makeMockOffer();
+export const makeMockOfferForCity = (cityName: CityName, id?: TPlaceCard['id']): TPlaceCard => {
+  const offer = makeMockOffer(id);
   offer.city.name = cityName;
   return offer;
 };
@@ -67,3 +72,46 @@ export const mockAuthData = (): AuthData => ({
   login: 'test',
   password: 'jhkv6ikhGgf',
 });
+
+export const mockStore = (): AppState => ({
+  [NameSpace.Cities]: {
+    city: CityName.Paris,
+    cityOffers: [
+      makeMockOfferForCity(CityName.Paris, 1),
+      makeMockOfferForCity(CityName.Paris, 2),
+      makeMockOfferForCity(CityName.Paris, 3),
+      makeMockOfferForCity(CityName.Paris, 4),
+    ],
+    error: null,
+  },
+  [NameSpace.User]: {
+    authStatus: AuthStatus.Auth,
+    userData: mockUserData(),
+  },
+  [NameSpace.Data]: {
+    offersList: [
+      makeMockOfferForCity(CityName.Paris, 1),
+      makeMockOfferForCity(CityName.Paris, 2),
+      makeMockOfferForCity(CityName.Paris, 3),
+      makeMockOfferForCity(CityName.Paris, 4),
+
+      makeMockOfferForCity(CityName.Amsterdam, 5),
+      makeMockOfferForCity(CityName.Brussels, 6),
+    ],
+    favoritesList: [makeMockOfferForCity(CityName.Paris, 2), makeMockOfferForCity(CityName.Paris, 3)],
+    favoritesCount: 2,
+  },
+});
+
+export type AppThunkDispatch = ThunkDispatch<AppState, ReturnType<typeof createAPI>, Action>;
+
+export const extractActionsTypes = (actions: Action<string>[]) => actions.map(({ type }) => type);
+
+export function getFakeStore() {
+  const axios = createAPI();
+  const mockAxiosAdapter = new MockAdapter(axios);
+  const middleware = [thunk.withExtraArgument(axios)];
+  const mockStoreCreator = configureMockStore<AppState, Action<string>, AppThunkDispatch>(middleware);
+
+  return { axios, mockAxiosAdapter, middleware, mockStoreCreator };
+}

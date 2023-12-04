@@ -48,3 +48,11 @@ export enum NameSpace {
 }
 
 export const SORT_BY_SEARCH_PARAM_NAME = 'sortBy';
+
+export enum APIRoute {
+  Login = '/login',
+  Logout = '/logout',
+  Offers = '/offers',
+  Favorite = '/favorite',
+  Comments = '/comments',
+}

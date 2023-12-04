@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
 import PlaceCard from '../../components/place-card/place-card';
-import { APP_TITLE } from '../../const';
+import { APIRoute, APP_TITLE } from '../../const';
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Preloader from '../../components/preloader/preloader';
@@ -47,7 +47,7 @@ export default function FavoritesPage(): React.ReactNode {
   }
   useEffect(() => {
     api
-      .get<Array<TPlaceCard>>('/favorite')
+      .get<Array<TPlaceCard>>(APIRoute.Favorite)
       .then(({ data }) => setFavs(data))
       .catch(() => setFavs([]));
   }, []);

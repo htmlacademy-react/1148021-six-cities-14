@@ -2,7 +2,7 @@ import { Header } from '../../components/header/header';
 import PlaceCard from '../../components/place-card/place-card';
 import Review from '../../components/review/review';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, APP_TITLE } from '../../const';
+import { AppRoute, APP_TITLE, APIRoute } from '../../const';
 import YourReviewForm from '../../components/your-review-form/your-review-form';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
@@ -101,7 +101,7 @@ function OfferReviews({ offerId }: { offerId: TPlaceCard['id'] }): ReactNode {
 
   useEffect(() => {
     api
-      .get<Array<TReview>>(`/comments/${offerId}`)
+      .get<Array<TReview>>(`${APIRoute.Comments}/${offerId}`)
       .then(({ data }) => setAllReviews(data))
       .catch(() => setAllReviews([]));
   }, [offerId]);
@@ -166,7 +166,7 @@ export default function OfferPage(): ReactNode {
 
   useEffect(() => {
     api
-      .get<TPlaceCard>(`/offers/${id}`)
+      .get<TPlaceCard>(`${APIRoute.Offers}/${id}`)
       .then(({ data }) => setOffer(data))
       .catch(() => dispatch(redirectToRouteAction(AppRoute.NotFound)));
   }, [dispatch, id]);
@@ -174,7 +174,7 @@ export default function OfferPage(): ReactNode {
   useEffect(() => {
     if (offer) {
       api
-        .get<Array<TPlaceCard>>(`/offers/${id}/nearby`)
+        .get<Array<TPlaceCard>>(`${APIRoute.Offers}/${id}/nearby`)
         .then(({ data }) => setOffersNearby(data))
         .catch(() => setOffersNearby([]));
     }
