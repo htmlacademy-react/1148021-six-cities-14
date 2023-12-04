@@ -38,6 +38,7 @@ export const dataSlice = createSlice({
         state.favoritesCount = 0;
       })
       .addCase(logoutAction.fulfilled, (state) => {
+        state.favoritesList = [];
         state.favoritesCount = 0;
       });
   },
