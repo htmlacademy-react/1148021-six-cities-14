@@ -1,5 +1,6 @@
 import { TPlaceCard } from '../components/place-card/place-card.types';
 import { CityName } from '../const';
+import { AuthData, UserData } from '../store/store.types';
 
 export const makeMockOffer = (): TPlaceCard => ({
   city: {
@@ -52,3 +53,17 @@ export const makeMockOfferForCity = (cityName: CityName): TPlaceCard => {
   offer.city.name = cityName;
   return offer;
 };
+
+export const mockUserData = (): UserData => ({
+  id: 1,
+  email: 'test@yandex.ru',
+  name: 'testName',
+  avatarUrl: 'https://14.react.pages.academy/static/avatar/7.jpg',
+  isPro: false,
+  token: 'jhjyo7by7ybp97yp9ypb',
+});
+
+export const mockAuthData = (): AuthData => ({
+  login: 'test',
+  password: 'jhkv6ikhGgf',
+});
