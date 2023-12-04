@@ -60,12 +60,12 @@ export default function FavoritesPage(): React.ReactNode {
 
       <Header />
 
-      <main
-        className={classNames('page__main', 'page__main--favorites', { 'page__main--favorites-empty': isFavsEmpty })}
-      >
-        {favs === null ? (
-          <Preloader />
-        ) : (
+      {favs === null ? (
+        <Preloader />
+      ) : (
+        <main
+          className={classNames('page__main', 'page__main--favorites', { 'page__main--favorites-empty': isFavsEmpty })}
+        >
           <div className="page__favorites-container container">
             <section className={classNames('favorites', { 'favorites--empty': isFavsEmpty })}>
               {isFavsEmpty ? (
@@ -100,8 +100,8 @@ export default function FavoritesPage(): React.ReactNode {
               )}
             </section>
           </div>
-        )}
-      </main>
+        </main>
+      )}
 
       <Footer />
     </div>

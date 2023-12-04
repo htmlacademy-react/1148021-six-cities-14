@@ -193,7 +193,9 @@ export default function OfferPage(): ReactNode {
       <Header />
 
       {!offer ? (
-        <Preloader />
+        <div className="cix-cities-empty-page">
+          <Preloader />
+        </div>
       ) : (
         <main className="page__main page__main--offer">
           <section className="offer">

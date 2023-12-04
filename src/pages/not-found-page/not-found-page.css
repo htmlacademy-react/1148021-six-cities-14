@@ -6,8 +6,6 @@
 
 .page__404 {
   display: table;
-  width: 100%;
-  height: calc(100vh - 80px);
   text-align: center;
   font-family: 'Lato', sans-serif;
   color: #888;

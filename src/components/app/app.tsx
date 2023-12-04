@@ -13,6 +13,7 @@ import HistoryRouter from '../history-route/history-route';
 import Notification from '../notification/notification';
 import Layout from '../layout/layout';
 import LoginWithAuthCheckPage from '../../pages/login-page/login-page';
+import './app.css';
 
 export default function App(): React.ReactNode {
   return (

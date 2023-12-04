@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { api } from '../../store';
 import { TReview } from '../review/review.types';
 import { TPlaceCard } from '../place-card/place-card.types';
+import Preloader from '../preloader/preloader';
 
 type YourReviewFormProps = {
   offerId: TPlaceCard['id'];
@@ -23,6 +24,7 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
 
   const [formData, setFormData] = useState<typeof initialFormData>(initialFormData);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isFormPending, setIsFormPending] = useState(false);
 
   const handleCommentFieldChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -41,11 +43,14 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> | undefined = (event) => {
     event.preventDefault();
     const requestData = { comment: formData.review, rating: formData.rating };
-    // todo : block form
-    api.post<Array<TReview>>(`/comments/${offerId}`, requestData).then(({ data }) => {
-      setFormData(initialFormData);
-      onSubmitSuccess(data);
-    });
+    setIsFormPending(true);
+    api
+      .post<Array<TReview>>(`/comments/${offerId}`, requestData)
+      .then(({ data }) => {
+        setFormData(initialFormData);
+        onSubmitSuccess(data);
+      })
+      .finally(() => setIsFormPending(false));
   };
 
   useEffect(() => {
@@ -55,6 +60,10 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
         formData.review.length <= reviewMaxLength
     );
   }, [formData]);
+
+  if (isFormPending) {
+    return <Preloader />;
+  }
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>

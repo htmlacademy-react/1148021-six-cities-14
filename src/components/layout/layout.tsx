@@ -4,6 +4,7 @@ import { getAuthCheckedStatus, getIsAuthorized } from '../../store/user/user.sel
 import Preloader from '../preloader/preloader';
 import { useEffect } from 'react';
 import { fetchFavoritesAction } from '../../store/api-actions';
+import './layout.css';
 
 function Layout() {
   const isCheckedAuth = useAppSelector(getAuthCheckedStatus);
@@ -16,7 +17,7 @@ function Layout() {
     }
   }, [dispatch, isAuthorized]);
 
-  return isCheckedAuth ? <Outlet /> : <Preloader />;
+  return <div className="six-cities-layout">{isCheckedAuth ? <Outlet /> : <Preloader />}</div>;
 }
 
 export default Layout;
