@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { api } from '../../store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { incrementFavoritesCount } from '../../store/data/data.slice';
 import { getCityOffers } from '../../store/cities/cities.selectors';
 import { updateCityOffers } from '../../store/cities/cities.slice';
 import { redirectToRouteAction } from '../../store/actions';
-import { AppRoute } from '../../const';
+import { APIRoute, AppRoute } from '../../const';
 import { TPlaceCard } from '../place-card/place-card.types';
 
 type BookmarkBtnProps = {
@@ -24,7 +24,7 @@ export default function BookmarkBtn({
   size = 'small',
   onBookmarkDelete,
 }: BookmarkBtnProps): React.ReactNode {
-  const [isFav, setIsFav] = useState(isFavorite);
+  const [isFav, setIsFav] = useState<boolean>(isFavorite);
   const cityOffers = useAppSelector(getCityOffers);
   const dispatch = useAppDispatch();
 
@@ -33,10 +33,14 @@ export default function BookmarkBtn({
     big: { width: 31, height: 33 },
   };
 
+  useEffect(() => {
+    setIsFav(isFavorite);
+  }, [isFavorite]);
+
   function handleClick() {
     const newStatus = !isFav;
     api
-      .post<TPlaceCard>(`/favorite/${offerId}/${Number(newStatus)}`)
+      .post<TPlaceCard>(`${APIRoute.Favorite}/${offerId}/${Number(newStatus)}`)
       .then(({ data }) => {
         setIsFav(data.isFavorite);
 

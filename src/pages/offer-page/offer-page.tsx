@@ -178,7 +178,7 @@ export default function OfferPage(): ReactNode {
         .then(({ data }) => setOffersNearby(data))
         .catch(() => setOffersNearby([]));
     }
-  }, [dispatch, offer]);
+  }, [dispatch, offer, id]);
 
   if (!id) {
     return <Navigate to={AppRoute.NotFound} />;
