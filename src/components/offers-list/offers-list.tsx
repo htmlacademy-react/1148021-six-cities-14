@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PlaceCard from '../place-card/place-card';
 import Map from '../map/map';
 import OffersSorting from '../offers-sorting/offers-sorting';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch } from '../../hooks/hooks';
 import { updateCityOffers } from '../../store/cities/cities.slice';
 import { SortOptions } from '../offers-sorting/offers-sorting.types';
 import { CityName } from '../../const';

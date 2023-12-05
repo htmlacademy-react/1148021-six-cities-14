@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import LogoLink from '../../components/logo-link/logo-link';
 import { APP_TITLE, AppRoute } from '../../const';
 import React, { FormEvent, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { loginAction } from '../../store/api-actions';
 import { getIsAuthorized } from '../../store/user/user.selectors';
 import { Link, Navigate } from 'react-router-dom';

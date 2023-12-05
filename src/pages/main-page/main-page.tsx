@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Header } from '../../components/header/header';
 import OffersList from '../../components/offers-list/offers-list';
 import CitiesTabs from '../../components/cities-tabs/cities-tabs';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { APP_CITIES, AppRoute, CityName, SORT_BY_SEARCH_PARAM_NAME } from '../../const';
 import { fetchOffersAction } from '../../store/api-actions';

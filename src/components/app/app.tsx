@@ -7,7 +7,7 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import { PrivateRoute } from '../private-route/private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
-import { store } from '../../store';
+import { store } from '../../store/store';
 import browserHistory from '../../browser-history';
 import HistoryRouter from '../history-route/history-route';
 import Notification from '../notification/notification';

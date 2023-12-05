@@ -1,4 +1,4 @@
-import { store } from '.';
+import { store } from './store';
 import { TPlaceCard } from '../components/place-card/place-card.types';
 import { AuthStatus, CityName } from '../const';
 

@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { getAuthCheckedStatus, getIsAuthorized } from '../../store/user/user.selectors';
 import Preloader from '../preloader/preloader';
 import { useEffect } from 'react';

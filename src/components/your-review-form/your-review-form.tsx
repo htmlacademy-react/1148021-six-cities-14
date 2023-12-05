@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { api } from '../../store';
+import { api } from '../../store/store';
 import { TReview } from '../review/review.types';
 import { TPlaceCard } from '../place-card/place-card.types';
 import Preloader from '../preloader/preloader';

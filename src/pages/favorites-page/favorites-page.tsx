@@ -5,7 +5,7 @@ import { APIRoute, APP_TITLE } from '../../const';
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Preloader from '../../components/preloader/preloader';
-import { api } from '../../store';
+import { api } from '../../store/store';
 import { Header } from '../../components/header/header';
 import { TPlaceCard } from '../../components/place-card/place-card.types';
 import { Link } from 'react-router-dom';

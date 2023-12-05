@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import LogoLink from '../logo-link/logo-link';
 import { logoutAction } from '../../store/api-actions';
 import { MouseEvent } from 'react';
