@@ -1,15 +1,4 @@
 import { store } from './store';
-import { TPlaceCard } from '../components/place-card/place-card.types';
-import { AuthStatus, CityName } from '../const';
-
-export type State = {
-  city: CityName | null;
-  offersList: Array<TPlaceCard> | null;
-  cityOffers: Array<TPlaceCard>;
-  authorizationStatus: AuthStatus;
-  error: string | null;
-  userData: UserData | null;
-};
 
 export type AppState = ReturnType<typeof store.getState>;
 
