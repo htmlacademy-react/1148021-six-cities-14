@@ -100,10 +100,20 @@ function OfferReviews({ offerId }: { offerId: TPlaceCard['id'] }): ReactNode {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     api
       .get<Array<TReview>>(`${APIRoute.Comments}/${offerId}`)
-      .then(({ data }) => setAllReviews(data))
-      .catch(() => setAllReviews([]));
+      .catch(() => ({ data: [] }))
+      .then(({ data }) => {
+        if (isMounted) {
+          setAllReviews(data);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [offerId]);
 
   return (
@@ -165,19 +175,39 @@ export default function OfferPage(): ReactNode {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     api
       .get<TPlaceCard>(`${APIRoute.Offers}/${id}`)
-      .then(({ data }) => setOffer(data))
+      .then(({ data }) => {
+        if (isMounted) {
+          setOffer(data);
+        }
+      })
       .catch(() => dispatch(redirectToRouteAction(AppRoute.NotFound)));
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch, id]);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (offer) {
       api
         .get<Array<TPlaceCard>>(`${APIRoute.Offers}/${id}/nearby`)
-        .then(({ data }) => setOffersNearby(data))
-        .catch(() => setOffersNearby([]));
+        .catch(() => ({ data: [] }))
+        .then(({ data }) => {
+          if (isMounted) {
+            setOffersNearby(data);
+          }
+        });
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch, offer, id]);
 
   if (!id) {

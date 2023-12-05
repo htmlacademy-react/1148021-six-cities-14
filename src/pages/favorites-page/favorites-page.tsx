@@ -46,10 +46,19 @@ export default function FavoritesPage(): React.ReactNode {
     }
   }
   useEffect(() => {
+    let isMounted = true;
     api
       .get<Array<TPlaceCard>>(APIRoute.Favorite)
-      .then(({ data }) => setFavs(data))
-      .catch(() => setFavs([]));
+      .catch(() => ({ data: [] }))
+      .then(({ data }) => {
+        if (isMounted) {
+          setFavs(data);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
