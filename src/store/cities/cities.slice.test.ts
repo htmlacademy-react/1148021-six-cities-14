@@ -2,11 +2,13 @@ import { citiesSlice, setError, updateCity, updateCityOffers } from './cities.sl
 import { CityName } from '../../const';
 import { AxiosError } from 'axios';
 import { makeMockOfferForCity } from '../../utils/mock';
+import { AppState } from '../store.types';
+import { logoutAction } from '../api-actions';
 
 describe('Cities slice', () => {
   it('Should return initial state with empty action', () => {
     const emptyAction = { type: '' };
-    const expectedState = {
+    const expectedState: AppState['CITIES'] = {
       city: 'Paris' as CityName,
       cityOffers: [],
       error: null,
@@ -19,7 +21,7 @@ describe('Cities slice', () => {
 
   it('should return default initial state with empty action and undefined state', () => {
     const emptyAction = { type: '' };
-    const initialState = {
+    const initialState: AppState['CITIES'] = {
       city: null,
       cityOffers: [],
       error: null,
@@ -31,7 +33,7 @@ describe('Cities slice', () => {
   });
 
   it('should update city with "updateCity" action', () => {
-    const initialState = {
+    const initialState: AppState['CITIES'] = {
       city: CityName.Amsterdam,
       cityOffers: [],
       error: null,
@@ -45,7 +47,7 @@ describe('Cities slice', () => {
   });
 
   it('should set error with "setError" action', () => {
-    const initialState = {
+    const initialState: AppState['CITIES'] = {
       city: CityName.Amsterdam,
       cityOffers: [],
       error: null,
@@ -59,7 +61,7 @@ describe('Cities slice', () => {
   });
 
   it('should update city offers with "updateCityOffers" action', () => {
-    const initialState = {
+    const initialState: AppState['CITIES'] = {
       city: null,
       cityOffers: [],
       error: null,
@@ -77,7 +79,7 @@ describe('Cities slice', () => {
   });
 
   it('should update city offers (with filtering by city) with "updateCityOffers" action', () => {
-    const initialState = {
+    const initialState: AppState['CITIES'] = {
       city: null,
       cityOffers: [],
       error: null,
@@ -97,6 +99,27 @@ describe('Cities slice', () => {
       ...initialState,
       cityOffers: [makeMockOfferForCity(CityName.Amsterdam), makeMockOfferForCity(CityName.Amsterdam)],
     };
-    expect(result).toEqual(expectedState);
+    expect(result).toMatchObject(expectedState);
+  });
+
+  it('should reset isFavorite = false in all cityOffers with "logoutAction.fulfilled"', () => {
+    const mockCityOffers = [
+      { ...makeMockOfferForCity(CityName.Cologne, 1), isFavorite: true },
+      makeMockOfferForCity(CityName.Cologne, 2),
+      { ...makeMockOfferForCity(CityName.Cologne, 3), isFavorite: true },
+    ];
+    const initialState: AppState['CITIES'] = {
+      cityOffers: mockCityOffers,
+      city: CityName.Cologne,
+      error: null,
+    };
+
+    const result = citiesSlice.reducer(initialState, logoutAction.fulfilled);
+    const expectedState = {
+      ...initialState,
+      cityOffers: mockCityOffers.map((offer) => ({ ...offer, isFavorite: false })),
+    };
+
+    expect(result.cityOffers).toMatchObject(expectedState.cityOffers);
   });
 });

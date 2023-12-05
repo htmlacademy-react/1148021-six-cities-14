@@ -61,3 +61,13 @@ export enum APIRoute {
   Favorite = '/favorite',
   Comments = '/comments',
 }
+
+export enum APIAction {
+  FETCH_FAVORITES = 'data/fetchFavorites',
+  FETCH_OFFERS = 'data/fetchOffers',
+  CLEAR_ERROR = 'cities/clearError',
+  REDIRECT_TO_ROUTE = 'cities/redirectToRoute',
+  USER_LOGIN = 'user/login',
+  USER_LOGOUT = 'user/logout',
+  USER_CHECK_AUTH = 'user/checkAuth',
+}

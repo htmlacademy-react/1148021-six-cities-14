@@ -5,7 +5,7 @@ import { SortOptions } from './offers-sorting.types';
 import { SORT_BY_SEARCH_PARAM_NAME } from '../../const';
 
 const offersSortOptions = Object.entries(SortOptions).map(([, option]) => ({ name: option, title: option }));
-const offersSortDefaultOption = offersSortOptions[0].name;
+const offersSortDefaultOption = SortOptions.Popular;
 
 type OffersSortingProps = {
   onSortChange: (name: string) => void;
@@ -20,7 +20,7 @@ export default function OffersSorting({ onSortChange }: OffersSortingProps): Rea
     setIsOpened((prevIsOpened) => !prevIsOpened);
   }
 
-  function handleChangeOption(option: typeof offersSortDefaultOption) {
+  function handleChangeOption(option: SortOptions) {
     setSearchParams({ [SORT_BY_SEARCH_PARAM_NAME]: option });
   }
 

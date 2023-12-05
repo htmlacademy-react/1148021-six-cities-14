@@ -3,6 +3,7 @@ import { api } from '../../store/store';
 import { TReview } from '../review/review.types';
 import { TPlaceCard } from '../place-card/place-card.types';
 import Preloader from '../preloader/preloader';
+import { APIRoute } from '../../const';
 
 type YourReviewFormProps = {
   offerId: TPlaceCard['id'];
@@ -17,8 +18,8 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
     { count: 2, title: '' },
     { count: 1, title: '' },
   ] as const;
-  const reviewMinLength = 50;
-  const reviewMaxLength = 300;
+  const REVIEW_MIN_LENGTH = 50;
+  const REVIEW_MAX_LENGTH = 300;
 
   const initialFormData = { rating: 0, review: '' };
 
@@ -45,7 +46,7 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
     const requestData = { comment: formData.review, rating: formData.rating };
     setIsFormPending(true);
     api
-      .post<Array<TReview>>(`/comments/${offerId}`, requestData)
+      .post<Array<TReview>>(`${APIRoute.Comments}/${offerId}`, requestData)
       .then(({ data }) => {
         setFormData(initialFormData);
         onSubmitSuccess(data);
@@ -56,8 +57,8 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
   useEffect(() => {
     setIsFormValid(
       Object.values(formData).reduce((prev, curr) => prev && !!curr, true) &&
-        formData.review.length >= reviewMinLength &&
-        formData.review.length <= reviewMaxLength
+        formData.review.length >= REVIEW_MIN_LENGTH &&
+        formData.review.length <= REVIEW_MAX_LENGTH
     );
   }, [formData]);
 
@@ -104,7 +105,7 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
-          with at least <b className="reviews__text-amount">{reviewMinLength} characters</b>.
+          with at least <b className="reviews__text-amount">{REVIEW_MIN_LENGTH} characters</b>.
         </p>
         <button className="reviews__submit form__submit button" type="submit" disabled={!isFormValid}>
           Submit
