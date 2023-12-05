@@ -37,6 +37,13 @@ export const APP_CITIES = [
 ] as const;
 export const DEFAULT_CITY: CityName = CityName.Paris;
 
+export enum ApartmentType {
+  apartment = 'Apartment',
+  room = 'Room',
+  house = 'House',
+  hotel = 'Hotel',
+}
+
 export const TIMEOUT_SHOW_ERROR = 5000;
 
 export enum NameSpace {

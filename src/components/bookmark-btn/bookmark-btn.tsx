@@ -39,7 +39,7 @@ export default function BookmarkBtn({
     if (isFav !== isFavorite) {
       setIsFav(isFavorite);
     }
-  }, [isFavorite, isAuthorized]);
+  }, [isFavorite, isAuthorized, offerId]);
 
   useEffect(() => {
     if (!isAuthorized) {
@@ -49,7 +49,7 @@ export default function BookmarkBtn({
         onBookmarkDelete();
       }
     }
-  }, [isAuthorized]);
+  }, [isAuthorized, onBookmarkDelete]);
 
   function handleClick() {
     if (!isAuthorized) {

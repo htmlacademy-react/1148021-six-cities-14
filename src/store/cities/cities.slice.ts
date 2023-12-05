@@ -39,7 +39,7 @@ export const citiesSlice = createSlice({
         newCityOffers = newCityOffers.filter((offer) => offer.city.name === cityName);
       }
 
-      if (option) {
+      if (option && offersSortFunctions[option]) {
         newCityOffers = offersSortFunctions[option](newCityOffers);
       }
 

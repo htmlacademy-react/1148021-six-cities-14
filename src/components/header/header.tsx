@@ -39,7 +39,7 @@ export function Header(): React.ReactNode {
                   </div>
                   {isAuthorized ? (
                     <>
-                      <span className="header__user-name user__name">{userData?.name}</span>
+                      <span className="header__user-name user__name">{userData?.email}</span>
                       {favsCount ? <span className="header__favorite-count">{favsCount}</span> : null}
                     </>
                   ) : (

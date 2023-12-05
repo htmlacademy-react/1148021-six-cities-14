@@ -2,7 +2,7 @@ import { Header } from '../../components/header/header';
 import PlaceCard from '../../components/place-card/place-card';
 import Review from '../../components/review/review';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, APP_TITLE, APIRoute } from '../../const';
+import { AppRoute, APP_TITLE, APIRoute, ApartmentType } from '../../const';
 import YourReviewForm from '../../components/your-review-form/your-review-form';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
@@ -17,7 +17,8 @@ import BookmarkBtn from '../../components/bookmark-btn/bookmark-btn';
 import { TPlaceCard } from '../../components/place-card/place-card.types';
 import { TReview } from '../../components/review/review.types';
 import { TPoint } from '../../components/map/map.types';
-import { processReviewsForOfferPage } from '../../utils/utils';
+import { getCountWithPluralizedWord, processReviewsForOfferPage } from '../../utils/utils';
+import classNames from 'classnames';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
   return (
@@ -36,9 +37,13 @@ function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
 function OfferFeatures({ offer }: { offer: TPlaceCard }): ReactNode {
   return (
     <ul className="offer__features">
-      <li className="offer__feature offer__feature--entire">{offer.type}</li>
-      <li className="offer__feature offer__feature--bedrooms">{offer.bedrooms} Bedrooms</li>
-      <li className="offer__feature offer__feature--adults">Max {offer.maxAdults} adults</li>
+      <li className="offer__feature offer__feature--entire">{ApartmentType[offer.type]}</li>
+      <li className="offer__feature offer__feature--bedrooms">
+        {getCountWithPluralizedWord('Bedroom', offer.bedrooms)}
+      </li>
+      <li className="offer__feature offer__feature--adults">
+        Max {getCountWithPluralizedWord('adult', offer.maxAdults)}
+      </li>
     </ul>
   );
 }
@@ -78,7 +83,13 @@ function OfferHost({
     <div className="offer__host">
       <h2 className="offer__host-title">Meet the host</h2>
       <div className="offer__host-user user">
-        <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+        <div
+          className={classNames(
+            'offer__avatar-wrapper',
+            { 'offer__avatar-wrapper--pro': host.isPro },
+            'user__avatar-wrapper'
+          )}
+        >
           <img className="offer__avatar user__avatar" src={host.avatarUrl} width={74} height={74} alt="Host avatar" />
         </div>
         <span className="offer__user-name">{host.name}</span>

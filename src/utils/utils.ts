@@ -15,3 +15,7 @@ export const getRandomCity = () => {
   const randomCityIndex = Math.floor(Math.random() * (max - min + 1)) + min;
   return APP_CITIES[randomCityIndex];
 };
+
+export const pluralize = (word: string, count: number) => (count > 1 ? `${word}s` : word);
+
+export const getCountWithPluralizedWord = (word: string, count: number) => `${count} ${pluralize(word, count)}`;
