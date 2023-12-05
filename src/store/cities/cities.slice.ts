@@ -1,7 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { TPlaceCard } from '../../components/place-card/place-card';
 import { CityName, NameSpace } from '../../const';
 import { SortOptions } from '../../components/offers-sorting/offers-sorting.types';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
+import { logoutAction } from '../api-actions';
 
 const initialState: {
   city: CityName | null;
@@ -38,7 +39,7 @@ export const citiesSlice = createSlice({
         newCityOffers = newCityOffers.filter((offer) => offer.city.name === cityName);
       }
 
-      if (option) {
+      if (option && offersSortFunctions[option]) {
         newCityOffers = offersSortFunctions[option](newCityOffers);
       }
 
@@ -47,6 +48,12 @@ export const citiesSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(logoutAction.fulfilled, (state) => {
+      const clearedCityOffers = state.cityOffers.map((offer) => ({ ...offer, isFavorite: false }));
+      state.cityOffers = clearedCityOffers;
+    });
   },
 });
 

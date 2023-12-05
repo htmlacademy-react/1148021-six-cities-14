@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
-import { TPlaceCard } from '../../components/place-card/place-card';
-import { fetchFavoritesAction, fetchOffersAction } from '../api-actions';
+import { fetchFavoritesAction, fetchOffersAction, logoutAction } from '../api-actions';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
 
 const initialState: {
   offersList: Array<TPlaceCard> | null;
@@ -34,6 +34,10 @@ export const dataSlice = createSlice({
         state.favoritesCount = action.payload?.length || 0;
       })
       .addCase(fetchFavoritesAction.rejected, (state) => {
+        state.favoritesList = [];
+        state.favoritesCount = 0;
+      })
+      .addCase(logoutAction.fulfilled, (state) => {
         state.favoritesList = [];
         state.favoritesCount = 0;
       });

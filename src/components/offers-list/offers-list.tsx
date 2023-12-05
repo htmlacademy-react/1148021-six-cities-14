@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import PlaceCard, { TPlaceCard } from '../place-card/place-card';
+import PlaceCard from '../place-card/place-card';
 import Map from '../map/map';
 import OffersSorting from '../offers-sorting/offers-sorting';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch } from '../../hooks/hooks';
 import { updateCityOffers } from '../../store/cities/cities.slice';
 import { SortOptions } from '../offers-sorting/offers-sorting.types';
 import { CityName } from '../../const';
+import { TPlaceCard } from '../place-card/place-card.types';
+import { getCountWithPluralizedWord } from '../../utils/utils';
 
 type TOffersListProps = {
   offers: Array<TPlaceCard>;
@@ -30,7 +32,7 @@ export default function OffersList({ offers, city: cityName }: TOffersListProps)
       <section className="cities__places places">
         <h2 className="visually-hidden">Places</h2>
         <b className="places__found">
-          {offers.length} places to stay in {cityName}
+          {getCountWithPluralizedWord('place', offers.length)} to stay in {cityName}
         </b>
         <OffersSorting onSortChange={handleSortClick} />
         <div className="cities__places-list places__list tabs__content">

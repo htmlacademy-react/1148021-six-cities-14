@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { StatusCodes } from 'http-status-codes';
-import { store } from '../store';
+import { store } from '../store/store';
 import { clearErrorAction } from '../store/api-actions';
 import { getToken } from './token';
 import { setError } from '../store/cities/cities.slice';
@@ -11,7 +11,7 @@ type DetailMessageType = {
 
 const StatusCodeMapping: Record<number, boolean> = {
   [StatusCodes.BAD_REQUEST]: true,
-  [StatusCodes.UNAUTHORIZED]: true,
+  [StatusCodes.UNAUTHORIZED]: false,
   [StatusCodes.NOT_FOUND]: true,
 };
 

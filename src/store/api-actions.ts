@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, AuthData, AppState, UserData } from './store.types';
 import { AxiosInstance } from 'axios';
-import { TPlaceCard } from '../components/place-card/place-card';
 import { redirectToRouteAction } from './actions';
-import { AppRoute, TIMEOUT_SHOW_ERROR } from '../const';
+import { APIAction, APIRoute, AppRoute, TIMEOUT_SHOW_ERROR } from '../const';
 import { dropToken, saveToken } from '../services/token';
 import { setError } from './cities/cities.slice';
+import { TPlaceCard } from '../components/place-card/place-card.types';
 
 export const fetchFavoritesAction = createAsyncThunk<
   Array<TPlaceCard>,
@@ -15,8 +15,8 @@ export const fetchFavoritesAction = createAsyncThunk<
     state: AppState;
     extra: AxiosInstance;
   }
->('DATA/fetchFavorites', async (_arg, { extra: api }) => {
-  const { data } = await api.get<Array<TPlaceCard>>('/favorite');
+>(APIAction.FETCH_FAVORITES, async (_arg, { extra: api }) => {
+  const { data } = await api.get<Array<TPlaceCard>>(APIRoute.Favorite);
   return data;
 });
 
@@ -28,8 +28,8 @@ export const fetchOffersAction = createAsyncThunk<
     state: AppState;
     extra: AxiosInstance;
   }
->('DATA/fetchOffers', async (_arg, { extra: api }) => {
-  const { data } = await api.get<Array<TPlaceCard>>('/offers');
+>(APIAction.FETCH_OFFERS, async (_arg, { extra: api }) => {
+  const { data } = await api.get<Array<TPlaceCard>>(APIRoute.Offers);
   return data;
 });
 
@@ -39,7 +39,7 @@ export const clearErrorAction = createAsyncThunk<
   {
     dispatch: AppDispatch;
   }
->('cities/clearError', (_arg, { dispatch }) => {
+>(APIAction.CLEAR_ERROR, (_arg, { dispatch }) => {
   setTimeout(() => dispatch(setError(null)), TIMEOUT_SHOW_ERROR);
 });
 
@@ -51,8 +51,8 @@ export const checkAuthAction = createAsyncThunk<
     state: AppState;
     extra: AxiosInstance;
   }
->('user/checkAuth', async (_arg, { extra: api }) => {
-  const { data } = await api.get<UserData>('/login');
+>(APIAction.USER_CHECK_AUTH, async (_arg, { extra: api }) => {
+  const { data } = await api.get<UserData>(APIRoute.Login);
   return data;
 });
 
@@ -64,8 +64,8 @@ export const loginAction = createAsyncThunk<
     state: AppState;
     extra: AxiosInstance;
   }
->('USER/login', async ({ login: email, password }, { dispatch, extra: api }) => {
-  const { data } = await api.post<UserData>('/login', { email, password });
+>(APIAction.USER_LOGIN, async ({ login: email, password }, { dispatch, extra: api }) => {
+  const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
   saveToken(data.token);
   dispatch(redirectToRouteAction(AppRoute.Main));
   return data;
@@ -79,7 +79,7 @@ export const logoutAction = createAsyncThunk<
     state: AppState;
     extra: AxiosInstance;
   }
->('USER/logout', async (_arg, { extra: api }) => {
-  await api.delete('/logout');
+>(APIAction.USER_LOGOUT, async (_arg, { extra: api }) => {
+  await api.delete(APIRoute.Logout);
   dropToken();
 });

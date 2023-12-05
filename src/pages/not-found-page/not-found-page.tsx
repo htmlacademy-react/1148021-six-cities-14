@@ -7,7 +7,7 @@ export default function NotFoundPage(): React.ReactNode {
   return (
     <div className="page page--gray">
       <Header />
-      <main className="page__404">
+      <main className="cix-cities-empty-page page__404">
         <div className="fof">
           <h1>Error 404</h1>
           <p>

@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SortOptions } from './offers-sorting.types';
-import { sortBySearchParamName } from '../../const';
+import { SORT_BY_SEARCH_PARAM_NAME } from '../../const';
 
 const offersSortOptions = Object.entries(SortOptions).map(([, option]) => ({ name: option, title: option }));
-const offersSortDefaultOption = offersSortOptions[0].name;
+const offersSortDefaultOption = SortOptions.Popular;
 
 type OffersSortingProps = {
   onSortChange: (name: string) => void;
@@ -14,19 +14,19 @@ type OffersSortingProps = {
 export default function OffersSorting({ onSortChange }: OffersSortingProps): React.ReactNode {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isOpened, setIsOpened] = useState(false);
-  const sortBy = searchParams.get(sortBySearchParamName) as SortOptions;
+  const sortBy = searchParams.get(SORT_BY_SEARCH_PARAM_NAME) as SortOptions;
 
   function handleClick() {
     setIsOpened((prevIsOpened) => !prevIsOpened);
   }
 
-  function handleChangeOption(option: typeof offersSortDefaultOption) {
-    setSearchParams({ [sortBySearchParamName]: option });
+  function handleChangeOption(option: SortOptions) {
+    setSearchParams({ [SORT_BY_SEARCH_PARAM_NAME]: option });
   }
 
   useEffect(() => {
     if (!sortBy || !offersSortOptions.map((opt) => opt.name).includes(sortBy)) {
-      setSearchParams({ [sortBySearchParamName]: offersSortDefaultOption });
+      setSearchParams({ [SORT_BY_SEARCH_PARAM_NAME]: offersSortDefaultOption });
     }
     if (sortBy) {
       onSortChange(sortBy);

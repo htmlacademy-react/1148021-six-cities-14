@@ -1,4 +1,4 @@
-import { TPlaceCard } from '../../components/place-card/place-card';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
 import { CityName, NameSpace } from '../../const';
 import { AppState } from '../store.types';
 

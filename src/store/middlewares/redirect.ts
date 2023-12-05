@@ -2,14 +2,12 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import browserHistory from '../../browser-history';
 import { Middleware } from 'redux';
 import { rootReducer } from '../root-reducer';
-import { NameSpace } from '../../const';
+import { APIAction } from '../../const';
 
 type Reducer = ReturnType<typeof rootReducer>;
 
-export const RedirectToRouteActionType = `${NameSpace.User}/redirectToRoute`;
-
 export const redirect: Middleware<unknown, Reducer> = () => (next) => (action: PayloadAction<string>) => {
-  if (action.type === RedirectToRouteActionType) {
+  if (action.type === (APIAction.REDIRECT_TO_ROUTE as string)) {
     browserHistory.push(action.payload);
   }
 

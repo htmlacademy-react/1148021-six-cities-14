@@ -1,33 +1,47 @@
 import { Helmet } from 'react-helmet-async';
 import LogoLink from '../../components/logo-link/logo-link';
-import { AppTitle } from '../../const';
-import { FormEvent, useRef } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { APP_TITLE, AppRoute } from '../../const';
+import React, { FormEvent, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { loginAction } from '../../store/api-actions';
+import { getIsAuthorized } from '../../store/user/user.selectors';
+import { Link, Navigate } from 'react-router-dom';
+import { getRandomCity } from '../../utils/utils';
+import { setError } from '../../store/cities/cities.slice';
 
-export default function LoginPage(): React.ReactNode {
+function LoginPage(): React.ReactNode {
+  const testDigit = /[0-9]{1,}/;
+  const testLetter = /[a-zA-Z]{1,}/;
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const dispatch = useAppDispatch();
 
+  const randomCity = getRandomCity();
+
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    if (loginRef.current !== null && passwordRef.current !== null) {
-      dispatch(
-        loginAction({
-          login: loginRef.current.value,
-          password: passwordRef.current.value,
-        })
-      );
+    if (!loginRef.current || !passwordRef.current) {
+      return false;
     }
+
+    const login = loginRef.current.value;
+    const password = passwordRef.current.value;
+
+    if (!testDigit.test(password) || !testLetter.test(password)) {
+      dispatch(setError('password should contain atleast one number and one special character'));
+      return false;
+    }
+
+    dispatch(setError(null));
+    dispatch(loginAction({ login, password }));
   };
 
   return (
     <div className="page page--gray page--login">
       <Helmet>
-        <title>{AppTitle} - Login</title>
+        <title>{APP_TITLE} - Login</title>
       </Helmet>
       <header className="header">
         <div className="container">
@@ -72,13 +86,17 @@ export default function LoginPage(): React.ReactNode {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
-              </a>
+              <Link className="locations__item-link" to={`/${randomCity}`}>
+                <span>{randomCity}</span>
+              </Link>
             </div>
           </section>
         </div>
       </main>
     </div>
   );
+}
+
+export default function LoginWithAuthCheckPage(): React.ReactNode {
+  return useAppSelector(getIsAuthorized) ? <Navigate to={AppRoute.Main} /> : <LoginPage />;
 }

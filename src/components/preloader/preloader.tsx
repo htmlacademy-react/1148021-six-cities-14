@@ -1,7 +1,6 @@
 import React from 'react';
 import './preloader.css';
 
-// from https://codepen.io/androbiotic/pen/xxVPPwO
 export default function Preloader(): React.ReactNode {
   return (
     <div className="preloader-box">

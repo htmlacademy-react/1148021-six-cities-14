@@ -1,12 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
-import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
-import { AppTitle } from '../../const';
+import PlaceCard from '../../components/place-card/place-card';
+import { APIRoute, APP_TITLE } from '../../const';
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Preloader from '../../components/preloader/preloader';
-import { api } from '../../store';
+import { api } from '../../store/store';
 import { Header } from '../../components/header/header';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
+import { Link } from 'react-router-dom';
 
 function FavoritesEmptyBlock(): React.ReactNode {
   return (
@@ -44,26 +46,35 @@ export default function FavoritesPage(): React.ReactNode {
     }
   }
   useEffect(() => {
+    let isMounted = true;
     api
-      .get<Array<TPlaceCard>>('/favorite')
-      .then(({ data }) => setFavs(data))
-      .catch(() => setFavs([]));
+      .get<Array<TPlaceCard>>(APIRoute.Favorite)
+      .catch(() => ({ data: [] }))
+      .then(({ data }) => {
+        if (isMounted) {
+          setFavs(data);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
     <div className={classNames('page', { 'page--favorites-empty': isFavsEmpty })}>
       <Helmet>
-        <title>{AppTitle} - Favorites</title>
+        <title>{APP_TITLE} - Favorites</title>
       </Helmet>
 
       <Header />
 
-      <main
-        className={classNames('page__main', 'page__main--favorites', { 'page__main--favorites-empty': isFavsEmpty })}
-      >
-        {favs === null ? (
-          <Preloader />
-        ) : (
+      {favs === null ? (
+        <Preloader />
+      ) : (
+        <main
+          className={classNames('page__main', 'page__main--favorites', { 'page__main--favorites-empty': isFavsEmpty })}
+        >
           <div className="page__favorites-container container">
             <section className={classNames('favorites', { 'favorites--empty': isFavsEmpty })}>
               {isFavsEmpty ? (
@@ -76,9 +87,9 @@ export default function FavoritesPage(): React.ReactNode {
                       <li className="favorites__locations-items" key={city}>
                         <div className="favorites__locations locations locations--current">
                           <div className="locations__item">
-                            <a className="locations__item-link" href="#">
+                            <Link className="locations__item-link" to={`/${city}`}>
                               <span>{city}</span>
-                            </a>
+                            </Link>
                           </div>
                         </div>
                         <div className="favorites__places">
@@ -98,8 +109,8 @@ export default function FavoritesPage(): React.ReactNode {
               )}
             </section>
           </div>
-        )}
-      </main>
+        </main>
+      )}
 
       <Footer />
     </div>

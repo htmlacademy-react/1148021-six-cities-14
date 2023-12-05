@@ -1,19 +1,24 @@
 import { Header } from '../../components/header/header';
-import PlaceCard, { TPlaceCard } from '../../components/place-card/place-card';
-import Review, { TReview } from '../../components/review/review';
+import PlaceCard from '../../components/place-card/place-card';
+import Review from '../../components/review/review';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, AppTitle, AuthStatus } from '../../const';
-import YourReviewForm, { ReviewRequestData } from '../../components/your-review-form/your-review-form';
+import { AppRoute, APP_TITLE, APIRoute, ApartmentType } from '../../const';
+import YourReviewForm from '../../components/your-review-form/your-review-form';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
-import Map, { TPoint } from '../../components/map/map';
+import Map from '../../components/map/map';
 import { ReactNode, useEffect, useState } from 'react';
-import { api } from '../../store';
+import { api } from '../../store/store';
 import Preloader from '../../components/preloader/preloader';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { redirectToRouteAction } from '../../store/actions';
-import { getAuthStatus } from '../../store/user/user.selectors';
+import { getIsAuthorized } from '../../store/user/user.selectors';
 import BookmarkBtn from '../../components/bookmark-btn/bookmark-btn';
+import { TPlaceCard } from '../../components/place-card/place-card.types';
+import { TReview } from '../../components/review/review.types';
+import { TPoint } from '../../components/map/map.types';
+import { getCountWithPluralizedWord, processReviewsForOfferPage } from '../../utils/utils';
+import classNames from 'classnames';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
   return (
@@ -32,9 +37,13 @@ function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
 function OfferFeatures({ offer }: { offer: TPlaceCard }): ReactNode {
   return (
     <ul className="offer__features">
-      <li className="offer__feature offer__feature--entire">{offer.type}</li>
-      <li className="offer__feature offer__feature--bedrooms">{offer.bedrooms} Bedrooms</li>
-      <li className="offer__feature offer__feature--adults">Max {offer.maxAdults} adults</li>
+      <li className="offer__feature offer__feature--entire">{ApartmentType[offer.type]}</li>
+      <li className="offer__feature offer__feature--bedrooms">
+        {getCountWithPluralizedWord('Bedroom', offer.bedrooms)}
+      </li>
+      <li className="offer__feature offer__feature--adults">
+        Max {getCountWithPluralizedWord('adult', offer.maxAdults)}
+      </li>
     </ul>
   );
 }
@@ -74,7 +83,13 @@ function OfferHost({
     <div className="offer__host">
       <h2 className="offer__host-title">Meet the host</h2>
       <div className="offer__host-user user">
-        <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+        <div
+          className={classNames(
+            'offer__avatar-wrapper',
+            { 'offer__avatar-wrapper--pro': host.isPro },
+            'user__avatar-wrapper'
+          )}
+        >
           <img className="offer__avatar user__avatar" src={host.avatarUrl} width={74} height={74} alt="Host avatar" />
         </div>
         <span className="offer__user-name">{host.name}</span>
@@ -87,35 +102,44 @@ function OfferHost({
   );
 }
 
-function OfferReviews(): ReactNode {
-  const authStatus = useAppSelector(getAuthStatus);
-  const [reviews, setReviews] = useState<Array<TReview>>();
-  const { id } = useParams();
+function OfferReviews({ offerId }: { offerId: TPlaceCard['id'] }): ReactNode {
+  const isAuthorized = useAppSelector(getIsAuthorized);
+  const [allReviews, setAllReviews] = useState<Array<TReview>>();
 
-  const handleReviewSubmit = (requestData: ReviewRequestData) => {
-    api.post<Array<TReview>>(`/comments/${id}`, requestData).then(({ data }) => setReviews(data));
+  const handleReviewSubmitSuccess = (reviews: Array<TReview>) => {
+    setAllReviews(reviews);
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     api
-      .get<Array<TReview>>(`/comments/${id}`)
-      .then(({ data }) => setReviews(data))
-      .catch(() => setReviews([]));
-  }, [id]);
+      .get<Array<TReview>>(`${APIRoute.Comments}/${offerId}`)
+      .catch(() => ({ data: [] }))
+      .then(({ data }) => {
+        if (isMounted) {
+          setAllReviews(data);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [offerId]);
 
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">
-        Reviews · {reviews?.length ? <span className="reviews__amount">{reviews.length}</span> : 'No reviews yet'}
+        Reviews · {allReviews?.length ? <span className="reviews__amount">{allReviews.length}</span> : 'No reviews yet'}
       </h2>
-      {reviews?.length ? (
+      {allReviews?.length ? (
         <ul className="reviews__list">
-          {reviews.map((review) => (
+          {processReviewsForOfferPage(allReviews).map((review) => (
             <Review review={review} key={review.id} />
           ))}
         </ul>
       ) : null}
-      {authStatus === AuthStatus.Auth && <YourReviewForm onSubmit={handleReviewSubmit} />}
+      {isAuthorized && <YourReviewForm offerId={offerId} onSubmitSuccess={handleReviewSubmitSuccess} />}
     </section>
   );
 }
@@ -162,16 +186,40 @@ export default function OfferPage(): ReactNode {
   };
 
   useEffect(() => {
-    api
-      .get<TPlaceCard>(`/offers/${id}`)
-      .then(({ data }) => setOffer(data))
-      .catch(() => dispatch(redirectToRouteAction(AppRoute.NotFound)));
+    let isMounted = true;
 
     api
-      .get<Array<TPlaceCard>>(`/offers/${id}/nearby`)
-      .then(({ data }) => setOffersNearby(data))
-      .catch(() => setOffersNearby([]));
+      .get<TPlaceCard>(`${APIRoute.Offers}/${id}`)
+      .then(({ data }) => {
+        if (isMounted) {
+          setOffer(data);
+        }
+      })
+      .catch(() => dispatch(redirectToRouteAction(AppRoute.NotFound)));
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch, id]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (offer) {
+      api
+        .get<Array<TPlaceCard>>(`${APIRoute.Offers}/${id}/nearby`)
+        .catch(() => ({ data: [] }))
+        .then(({ data }) => {
+          if (isMounted) {
+            setOffersNearby(data);
+          }
+        });
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [dispatch, offer, id]);
 
   if (!id) {
     return <Navigate to={AppRoute.NotFound} />;
@@ -180,13 +228,15 @@ export default function OfferPage(): ReactNode {
   return (
     <div className="page">
       <Helmet>
-        <title>{AppTitle} - PlaceCard</title>
+        <title>{APP_TITLE} - PlaceCard</title>
       </Helmet>
 
       <Header />
 
       {!offer ? (
-        <Preloader />
+        <div className="cix-cities-empty-page">
+          <Preloader />
+        </div>
       ) : (
         <main className="page__main page__main--offer">
           <section className="offer">
@@ -208,7 +258,7 @@ export default function OfferPage(): ReactNode {
                 <OfferPrice price={offer.price} />
                 <OfferInside goods={offer.goods} />
                 <OfferHost host={offer.host} description={offer.description} />
-                <OfferReviews />
+                <OfferReviews offerId={offer.id} />
               </div>
             </div>
             <Map
