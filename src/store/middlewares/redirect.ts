@@ -7,7 +7,7 @@ import { APIAction } from '../../const';
 type Reducer = ReturnType<typeof rootReducer>;
 
 export const redirect: Middleware<unknown, Reducer> = () => (next) => (action: PayloadAction<string>) => {
-  if (action.type === APIAction.REDIRECT_TO_ROUTE) {
+  if (action.type === (APIAction.REDIRECT_TO_ROUTE as string)) {
     browserHistory.push(action.payload);
   }
 
