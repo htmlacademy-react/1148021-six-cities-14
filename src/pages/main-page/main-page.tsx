@@ -4,15 +4,13 @@ import OffersList from '../../components/offers-list/offers-list';
 import CitiesTabs from '../../components/cities-tabs/cities-tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { APP_CITIES, AppRoute, CityName, SORT_BY_SEARCH_PARAM_NAME } from '../../const';
+import { APP_CITIES, AppRoute, CityName, DEFAULT_CITY, SORT_BY_SEARCH_PARAM_NAME } from '../../const';
 import { fetchOffersAction } from '../../store/api-actions';
 import Preloader from '../../components/preloader/preloader';
-import { getOffers } from '../../store/data/data.selectors';
-import { updateCity, updateCityOffers } from '../../store/cities/cities.slice';
-import { getCity, getCityOffers } from '../../store/cities/cities.selectors';
+import { selectCityOffers } from '../../store/cities/cities.selectors';
 import { SortOptions } from '../../components/offers-sorting/offers-sorting.types';
 
-function EmptyOffersBlock({ activeCity }: { activeCity: CityName | null }): React.ReactNode {
+function EmptyOffersBlock({ activeCity }: { activeCity: CityName }): React.ReactNode {
   return (
     <>
       <section className="cities__no-places">
@@ -29,26 +27,22 @@ function EmptyOffersBlock({ activeCity }: { activeCity: CityName | null }): Reac
 }
 
 export default function MainPage(): React.ReactNode {
-  const { city } = useParams();
+  const activeCity = (useParams().city || DEFAULT_CITY) as CityName;
   const [searchParams] = useSearchParams();
   const sortBy = (searchParams.get(SORT_BY_SEARCH_PARAM_NAME) as SortOptions) || SortOptions.Popular;
 
-  const activeCity = useAppSelector(getCity);
-  const allOffers = useAppSelector(getOffers);
-  const cityOffers = useAppSelector(getCityOffers);
+  const cityOffers = useAppSelector((state) => selectCityOffers(state, activeCity, sortBy));
+  const hasOffersInCity = cityOffers && cityOffers?.length > 0;
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchOffersAction());
+    if (!cityOffers) {
+      dispatch(fetchOffersAction());
+    }
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(updateCity(city as CityName));
-    dispatch(updateCityOffers({ cityName: city as CityName, offers: allOffers || [], option: sortBy }));
-  }, [dispatch, city, allOffers, sortBy]);
-
-  if (!APP_CITIES.includes(city as CityName)) {
+  if (!APP_CITIES.includes(activeCity)) {
     return <Navigate to={AppRoute.NotFound} />;
   }
 
@@ -56,16 +50,16 @@ export default function MainPage(): React.ReactNode {
     <div className="page page--gray page--main">
       <Header />
 
-      <main className={`page__main page__main--index${cityOffers.length <= 0 ? ' page__main--index-empty' : ''}`}>
+      <main className={`page__main page__main--index${!hasOffersInCity ? ' page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <CitiesTabs />
 
         <div className="cities">
-          {cityOffers.length > 0 ? (
-            <OffersList offers={cityOffers} city={activeCity as CityName} />
+          {hasOffersInCity ? (
+            <OffersList offers={cityOffers} city={activeCity} />
           ) : (
             <div className="cities__places-container cities__places-container--empty container">
-              {!allOffers ? <Preloader /> : <EmptyOffersBlock activeCity={activeCity} />}
+              {!cityOffers ? <Preloader /> : <EmptyOffersBlock activeCity={activeCity} />}
             </div>
           )}
         </div>

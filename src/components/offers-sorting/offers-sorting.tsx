@@ -7,11 +7,7 @@ import { SORT_BY_SEARCH_PARAM_NAME } from '../../const';
 const offersSortOptions = Object.entries(SortOptions).map(([, option]) => ({ name: option, title: option }));
 const offersSortDefaultOption = SortOptions.Popular;
 
-type OffersSortingProps = {
-  onSortChange: (name: string) => void;
-};
-
-export default function OffersSorting({ onSortChange }: OffersSortingProps): React.ReactNode {
+export default function OffersSorting(): React.ReactNode {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isOpened, setIsOpened] = useState(false);
   const sortBy = searchParams.get(SORT_BY_SEARCH_PARAM_NAME) as SortOptions;
@@ -27,9 +23,6 @@ export default function OffersSorting({ onSortChange }: OffersSortingProps): Rea
   useEffect(() => {
     if (!sortBy || !offersSortOptions.map((opt) => opt.name).includes(sortBy)) {
       setSearchParams({ [SORT_BY_SEARCH_PARAM_NAME]: offersSortDefaultOption });
-    }
-    if (sortBy) {
-      onSortChange(sortBy);
     }
   }, [searchParams, setSearchParams]);
 

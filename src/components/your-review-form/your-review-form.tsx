@@ -3,7 +3,7 @@ import { api } from '../../store/store';
 import { TReview } from '../review/review.types';
 import { TPlaceCard } from '../place-card/place-card.types';
 import Preloader from '../preloader/preloader';
-import { APIRoute } from '../../const';
+import { APIRoute, ReviewTextLength, STARS } from '../../const';
 
 type YourReviewFormProps = {
   offerId: TPlaceCard['id'];
@@ -11,18 +11,7 @@ type YourReviewFormProps = {
 };
 
 export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewFormProps): React.ReactNode {
-  const stars = [
-    { count: 5, title: 'perfect' },
-    { count: 4, title: 'good' },
-    { count: 3, title: 'not bad' },
-    { count: 2, title: '' },
-    { count: 1, title: '' },
-  ] as const;
-  const REVIEW_MIN_LENGTH = 50;
-  const REVIEW_MAX_LENGTH = 300;
-
   const initialFormData = { rating: 0, review: '' };
-
   const [formData, setFormData] = useState<typeof initialFormData>(initialFormData);
   const [isFormValid, setIsFormValid] = useState(false);
   const [isFormPending, setIsFormPending] = useState(false);
@@ -57,8 +46,8 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
   useEffect(() => {
     setIsFormValid(
       Object.values(formData).reduce((prev, curr) => prev && !!curr, true) &&
-        formData.review.length >= REVIEW_MIN_LENGTH &&
-        formData.review.length <= REVIEW_MAX_LENGTH
+        (formData.review.length as ReviewTextLength) >= ReviewTextLength.Min &&
+        (formData.review.length as ReviewTextLength) <= ReviewTextLength.Max
     );
   }, [formData]);
 
@@ -73,7 +62,7 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
       </label>
 
       <div className="reviews__rating-form form__rating">
-        {stars.map(({ count, title }) => (
+        {STARS.map(({ count, title }) => (
           <Fragment key={count}>
             <input
               className="form__rating-input visually-hidden"
@@ -105,7 +94,7 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
-          with at least <b className="reviews__text-amount">{REVIEW_MIN_LENGTH} characters</b>.
+          with at least <b className="reviews__text-amount">{ReviewTextLength.Min} characters</b>.
         </p>
         <button className="reviews__submit form__submit button" type="submit" disabled={!isFormValid}>
           Submit

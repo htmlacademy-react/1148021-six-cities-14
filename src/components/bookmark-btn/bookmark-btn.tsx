@@ -2,17 +2,15 @@ import classNames from 'classnames';
 import { api } from '../../store/store';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { incrementFavoritesCount } from '../../store/data/data.slice';
-import { getCityOffers } from '../../store/cities/cities.selectors';
-import { updateCityOffers } from '../../store/cities/cities.slice';
+import { updateFavoritesIds } from '../../store/data/data.slice';
 import { redirectToRouteAction } from '../../store/actions';
 import { APIRoute, AppRoute } from '../../const';
 import { TPlaceCard } from '../place-card/place-card.types';
 import { getIsAuthorized } from '../../store/user/user.selectors';
+import { getFavoritesIds } from '../../store/data/data.selectors';
 
 type BookmarkBtnProps = {
   offerId: TPlaceCard['id'];
-  isFavorite: TPlaceCard['isFavorite'];
   section?: 'offer' | 'place-card';
   size?: 'small' | 'big';
   onBookmarkDelete?: () => void;
@@ -20,13 +18,12 @@ type BookmarkBtnProps = {
 
 export default function BookmarkBtn({
   offerId,
-  isFavorite,
   section = 'place-card',
   size = 'small',
   onBookmarkDelete,
 }: BookmarkBtnProps): React.ReactNode {
-  const [isFav, setIsFav] = useState<boolean>(isFavorite);
-  const cityOffers = useAppSelector(getCityOffers);
+  const [isFav, setIsFav] = useState<boolean>(false);
+  const favsIds = useAppSelector(getFavoritesIds);
   const isAuthorized = useAppSelector(getIsAuthorized);
   const dispatch = useAppDispatch();
 
@@ -36,18 +33,12 @@ export default function BookmarkBtn({
   };
 
   useEffect(() => {
-    if (isFav !== isFavorite) {
-      setIsFav(isFavorite);
-    }
-  }, [isFavorite, isAuthorized, offerId]);
+    setIsFav(favsIds.includes(offerId));
+  }, [offerId, favsIds]);
 
   useEffect(() => {
-    if (!isAuthorized) {
-      setIsFav(false);
-
-      if (onBookmarkDelete) {
-        onBookmarkDelete();
-      }
+    if (!isAuthorized && onBookmarkDelete) {
+      onBookmarkDelete();
     }
   }, [isAuthorized, onBookmarkDelete]);
 
@@ -66,11 +57,7 @@ export default function BookmarkBtn({
           onBookmarkDelete();
         }
 
-        dispatch(incrementFavoritesCount(data.isFavorite ? 1 : -1));
-        const newCityOffers = cityOffers.map((offer) =>
-          offer.id === offerId ? { ...offer, isFavorite: data.isFavorite } : offer
-        );
-        dispatch(updateCityOffers({ offers: newCityOffers }));
+        dispatch(updateFavoritesIds({ id: offerId, appendRemoveFlag: data.isFavorite }));
       })
       .catch(() => dispatch(redirectToRouteAction(AppRoute.Login)));
   }

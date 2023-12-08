@@ -63,11 +63,27 @@ export enum APIRoute {
 }
 
 export enum APIAction {
-  FETCH_FAVORITES = 'data/fetchFavorites',
-  FETCH_OFFERS = 'data/fetchOffers',
-  CLEAR_ERROR = 'cities/clearError',
-  REDIRECT_TO_ROUTE = 'cities/redirectToRoute',
-  USER_LOGIN = 'user/login',
-  USER_LOGOUT = 'user/logout',
-  USER_CHECK_AUTH = 'user/checkAuth',
+  FetchFavorites = 'data/fetchFavorites',
+  FetchOffers = 'data/fetchOffers',
+  ClearError = 'cities/clearError',
+  RedirectToRoute = 'cities/redirectToRoute',
+  UserLogin = 'user/login',
+  UserLogout = 'user/logout',
+  UserCheckAuth = 'user/checkAuth',
 }
+
+export const MAX_OFFER_PHOTOS_COUNT = 6;
+export const MAX_OFFER_NEARBIES_COUNT = 3;
+
+export enum ReviewTextLength {
+  Min = 50,
+  Max = 300,
+}
+
+export const STARS = [
+  { count: 5, title: 'perfect' },
+  { count: 4, title: 'good' },
+  { count: 3, title: 'not bad' },
+  { count: 2, title: '' },
+  { count: 1, title: '' },
+] as const;
