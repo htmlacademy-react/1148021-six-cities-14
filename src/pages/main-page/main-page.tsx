@@ -7,9 +7,9 @@ import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-
 import { APP_CITIES, AppRoute, CityName, DEFAULT_CITY, SORT_BY_SEARCH_PARAM_NAME } from '../../const';
 import { fetchOffersAction } from '../../store/api-actions';
 import Preloader from '../../components/preloader/preloader';
-import { selectOffersByCityAndSort } from '../../store/cities/cities.selectors';
 import { SortOptions } from '../../components/offers-sorting/offers-sorting.types';
 import classNames from 'classnames';
+import { selectOffersByCityAndSort } from '../../store/data/data.selectors';
 
 function EmptyOffersBlock({ activeCity }: { activeCity: CityName }): React.ReactNode {
   return (

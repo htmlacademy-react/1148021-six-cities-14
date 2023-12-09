@@ -2,9 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, AuthData, AppState, UserData } from './store.types';
 import { AxiosInstance } from 'axios';
 import { redirectToRouteAction } from './actions';
-import { APIAction, APIRoute, AppRoute, TIMEOUT_SHOW_ERROR } from '../const';
+import { APIAction, APIRoute, AppRoute } from '../const';
 import { dropToken, saveToken } from '../services/token';
-import { setError } from './cities/cities.slice';
 import { TPlaceCard } from '../components/place-card/place-card.types';
 
 export const fetchFavoritesAction = createAsyncThunk<
@@ -31,16 +30,6 @@ export const fetchOffersAction = createAsyncThunk<
 >(APIAction.FetchOffers, async (_arg, { extra: api }) => {
   const { data } = await api.get<Array<TPlaceCard>>(APIRoute.Offers);
   return data;
-});
-
-export const clearErrorAction = createAsyncThunk<
-  void,
-  undefined,
-  {
-    dispatch: AppDispatch;
-  }
->(APIAction.ClearError, (_arg, { dispatch }) => {
-  setTimeout(() => dispatch(setError(null)), TIMEOUT_SHOW_ERROR);
 });
 
 export const checkAuthAction = createAsyncThunk<

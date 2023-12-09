@@ -88,9 +88,6 @@ export const makeMockReview = (id: number = 1): TReview => ({
 export type AppThunkDispatch = ThunkDispatch<AppState, AxiosInstance, Action>;
 
 export const makeMockState = (initialState?: Partial<AppState>): AppState => ({
-  [NameSpace.Cities]: {
-    error: null,
-  },
   [NameSpace.Data]: {
     favoritesIds: [],
     offersList: null,

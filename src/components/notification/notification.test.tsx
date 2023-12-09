@@ -1,13 +1,11 @@
-// import { render, screen } from '@testing-library/react';
-// import Notification from './notification';
-// import { withStore } from '../../utils/mock-store-component';
+import { render, screen } from '@testing-library/react';
+import { Notification } from './notification';
 
 describe('Component: Notification', () => {
   it('Should render correct', () => {
-    expect(true).toBe(true);
-    // const { withStoreComponent } = withStore(<Notification />);
-    // render(withStoreComponent);
+    const mockError = 'Mock error';
+    render(<Notification error={mockError} />);
 
-    //expect(screen.getByTestId('notificationEl')).toBeInTheDocument();
+    expect(screen.getByText(mockError)).toBeInTheDocument();
   });
 });

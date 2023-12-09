@@ -7,7 +7,7 @@ import { loginAction } from '../../store/api-actions';
 import { getIsAuthorized } from '../../store/user/user.selectors';
 import { Link, Navigate } from 'react-router-dom';
 import { getRandomCity } from '../../utils/utils';
-import { setError } from '../../store/cities/cities.slice';
+import { showNotification } from '../../components/notification/show-notification';
 
 function LoginPage(): React.ReactNode {
   const testDigit = /[0-9]{1,}/;
@@ -30,11 +30,10 @@ function LoginPage(): React.ReactNode {
     const password = passwordRef.current.value;
 
     if (!testDigit.test(password) || !testLetter.test(password)) {
-      dispatch(setError('password should contain atleast one number and one special character'));
+      showNotification('password should contain atleast one number and one special character');
       return false;
     }
 
-    dispatch(setError(null));
     dispatch(loginAction({ login, password }));
   };
 
