@@ -4,7 +4,7 @@ import { TPlaceCard } from '../../components/place-card/place-card.types';
 import { CityName, NameSpace } from '../../const';
 import { AppState } from '../store.types';
 
-const offersSortFunctions = {
+const offersSortings = {
   [SortOptions.Popular]: (offers: Array<TPlaceCard>) => offers.slice(),
   [SortOptions.Price_low_to_high]: (offers: Array<TPlaceCard>) => offers.toSorted((a, b) => a.price - b.price),
   [SortOptions.Price_high_to_low]: (offers: Array<TPlaceCard>) => offers.toSorted((a, b) => b.price - a.price),
@@ -34,8 +34,8 @@ export const selectOffersByCityAndSort = createSelector(
       newOffers = newOffers.filter((offer) => offer.city.name === cityName);
     }
 
-    if (option && offersSortFunctions[option]) {
-      newOffers = offersSortFunctions[option](offers);
+    if (option && offersSortings[option]) {
+      newOffers = offersSortings[option](newOffers);
     }
 
     return newOffers;

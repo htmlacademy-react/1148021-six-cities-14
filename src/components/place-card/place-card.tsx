@@ -36,6 +36,7 @@ export default function PlaceCard({ card, section, onCardHover, onCardDelete }: 
       data-card-id={card.id}
       onMouseEnter={onCardHover && handleMouseEnter}
       onMouseLeave={onCardHover && handleMouseLeave}
+      data-testid="placeCardEl"
     >
       {card.isPremium && (
         <div className="place-card__mark">

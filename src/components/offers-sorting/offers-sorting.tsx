@@ -27,7 +27,7 @@ export default function OffersSorting(): React.ReactNode {
   }, [searchParams, setSearchParams]);
 
   return (
-    <form className="places__sorting" action="#" method="get" onClick={handleClick}>
+    <form className="places__sorting" action="#" method="get" onClick={handleClick} data-testid="offersSortingEl">
       <span className="places__sorting-caption">Sort by</span>
       <span className="places__sorting-type" tabIndex={0}>
         {offersSortOptions.find((opt) => opt.name === sortBy)?.title}

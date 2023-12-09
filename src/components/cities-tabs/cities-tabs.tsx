@@ -15,7 +15,7 @@ export default function CitiesTabs(): React.ReactNode {
     });
 
   return (
-    <div className="tabs">
+    <div className="tabs" data-testid="citiesTabsEl">
       <section className="locations container">
         <ul className="locations__list tabs__list">
           {APP_CITIES.map((city) => (

@@ -3,7 +3,7 @@ import { AppRoute } from '../../const';
 
 export default function Footer(): React.ReactNode {
   return (
-    <footer className="footer container">
+    <footer className="footer container" data-testid="footerElem">
       <Link className="footer__logo-link" to={AppRoute.Main}>
         <img
           className="footer__logo"
@@ -11,6 +11,7 @@ export default function Footer(): React.ReactNode {
           alt="6 cities logo"
           width={64}
           height={33}
+          data-testid="footerImgElem"
         />
       </Link>
     </footer>

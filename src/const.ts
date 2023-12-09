@@ -37,6 +37,7 @@ export const APP_CITIES = [
 ] as const;
 export const DEFAULT_CITY: CityName = CityName.Paris;
 
+// todo:ApartmentType ключи с большой буквы
 export enum ApartmentType {
   apartment = 'Apartment',
   room = 'Room',

@@ -12,6 +12,7 @@ export default function LogoLink(): React.ReactNode {
             'header__logo-link--active': isActive,
           })}
         to={AppRoute.Main}
+        data-testid="logoLinkEl"
       >
         <img
           className="header__logo"
@@ -19,6 +20,7 @@ export default function LogoLink(): React.ReactNode {
           alt="6 cities logo"
           width={81}
           height={41}
+          data-testid="logoLinkImgEl"
         />
       </NavLink>
     </>

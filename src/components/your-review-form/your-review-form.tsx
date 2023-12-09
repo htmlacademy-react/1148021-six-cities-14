@@ -44,10 +44,12 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
   };
 
   useEffect(() => {
+    const reviewLength = formData.review.length as ReviewTextLength;
+
     setIsFormValid(
       Object.values(formData).reduce((prev, curr) => prev && !!curr, true) &&
-        (formData.review.length as ReviewTextLength) >= ReviewTextLength.Min &&
-        (formData.review.length as ReviewTextLength) <= ReviewTextLength.Max
+        reviewLength >= ReviewTextLength.Min &&
+        reviewLength <= ReviewTextLength.Max
     );
   }, [formData]);
 

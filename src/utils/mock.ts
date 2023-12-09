@@ -1,6 +1,9 @@
+import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { TPlaceCard } from '../components/place-card/place-card.types';
+import { TReview } from '../components/review/review.types';
 import { CityName } from '../const';
-import { AuthData, UserData } from '../store/store.types';
+import { AppState, AuthData, UserData } from '../store/store.types';
+import { AxiosInstance } from 'axios';
 
 export const makeMockOffer = (id?: TPlaceCard['id']): TPlaceCard => ({
   city: {
@@ -67,3 +70,19 @@ export const mockAuthData = (): AuthData => ({
   login: 'test',
   password: 'jhkv6ikhGgf',
 });
+
+export const makeMockReview = (id: number = 1): TReview => ({
+  id,
+  comment:
+    'The house is very good, very happy, hygienic and simple living conditions around it are also very good. I hope to have the opportunity to come back. Thank you.',
+  date: '2023-11-15T21:00:00.557Z',
+  rating: 5,
+  user: {
+    id: 1,
+    name: 'Kendall',
+    avatarUrl: 'https://14.design.htmlacademy.pro/static/avatar/4.jpg',
+    isPro: false,
+  },
+});
+
+export type AppThunkDispatch = ThunkDispatch<AppState, AxiosInstance, Action>;
