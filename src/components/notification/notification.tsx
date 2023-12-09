@@ -5,5 +5,11 @@ import { getError } from '../../store/cities/cities.selectors';
 
 export default function Notification(): React.ReactNode {
   const error = useAppSelector(getError);
-  return error && <div className="cities-notification">{error}</div>;
+  return (
+    error && (
+      <div className="cities-notification" data-testid="notificationEl">
+        {error}
+      </div>
+    )
+  );
 }

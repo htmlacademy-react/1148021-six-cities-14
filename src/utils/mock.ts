@@ -1,7 +1,7 @@
 import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { TPlaceCard } from '../components/place-card/place-card.types';
 import { TReview } from '../components/review/review.types';
-import { CityName } from '../const';
+import { AuthStatus, CityName, NameSpace } from '../const';
 import { AppState, AuthData, UserData } from '../store/store.types';
 import { AxiosInstance } from 'axios';
 
@@ -86,3 +86,18 @@ export const makeMockReview = (id: number = 1): TReview => ({
 });
 
 export type AppThunkDispatch = ThunkDispatch<AppState, AxiosInstance, Action>;
+
+export const makeMockState = (initialState?: Partial<AppState>): AppState => ({
+  [NameSpace.Cities]: {
+    error: null,
+  },
+  [NameSpace.Data]: {
+    favoritesIds: [],
+    offersList: null,
+  },
+  [NameSpace.User]: {
+    authStatus: AuthStatus.Unknown,
+    userData: null,
+  },
+  ...(initialState ?? {}),
+});
