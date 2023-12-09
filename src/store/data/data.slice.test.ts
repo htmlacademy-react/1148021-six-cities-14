@@ -1,5 +1,5 @@
 import { NameSpace } from '../../const';
-import { makeMockOffer } from '../../utils/mock';
+import { makeMockOffer } from '../../utils/mocks';
 import { fetchFavoritesAction, fetchOffersAction, logoutAction } from '../api-actions';
 import { AppState } from '../store.types';
 import { dataSlice } from './data.slice';

@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import OffersSorting from './offers-sorting';
-import { withHistory } from '../../utils/mock-component';
+import { withMockHistory } from '../../utils/mock-components';
 import { SortOptions } from './offers-sorting.types';
 
 describe('Component: OffersSorting', () => {
   it('Should render correct', () => {
-    const component = withHistory(<OffersSorting />);
+    const component = withMockHistory(<OffersSorting />);
     render(component);
 
     expect(screen.getByTestId('offersSortingEl')).toBeInTheDocument();

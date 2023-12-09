@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import { withHistory } from '../../utils/mock-component';
+import { withMockHistory } from '../../utils/mock-components';
 import CitiesTabs from './cities-tabs';
 import { APP_CITIES } from '../../const';
 
 describe('Component: CitiesTabs', () => {
   it('Should render correct', () => {
-    const component = withHistory(<CitiesTabs />);
+    const component = withMockHistory(<CitiesTabs />);
 
     render(component);
 

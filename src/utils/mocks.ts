@@ -57,7 +57,7 @@ export const makeMockOfferForCity = (cityName: CityName, id?: TPlaceCard['id']):
   return offer;
 };
 
-export const mockUserData = (): UserData => ({
+export const makeMockUserData = (): UserData => ({
   id: 1,
   email: 'test@yandex.ru',
   name: 'testName',
@@ -66,7 +66,7 @@ export const mockUserData = (): UserData => ({
   token: 'jhjyo7by7ybp97yp9ypb',
 });
 
-export const mockAuthData = (): AuthData => ({
+export const makeMockAuthData = (): AuthData => ({
   login: 'test',
   password: 'jhkv6ikhGgf',
 });

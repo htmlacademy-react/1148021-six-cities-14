@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Map from './map';
-import { makeMockOffer } from '../../utils/mock';
+import { makeMockOffer } from '../../utils/mocks';
 import { TPoint } from './map.types';
 
 describe('Component: OffersSorting', () => {

@@ -49,7 +49,6 @@ export const TIMEOUT_SHOW_ERROR = 5000;
 
 export enum NameSpace {
   Data = 'DATA',
-  Cities = 'CITIES',
   User = 'USER',
 }
 

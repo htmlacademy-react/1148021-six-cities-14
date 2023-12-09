@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { withHistory } from '../../utils/mock-component';
+import { withMockHistory } from '../../utils/mock-components';
 import LogoLink from './logo-link';
 
 describe('Component: LogoLink', () => {
   it('Should render correct', () => {
-    const component = withHistory(<LogoLink />);
+    const component = withMockHistory(<LogoLink />);
 
     render(component);
 

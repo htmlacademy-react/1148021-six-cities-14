@@ -1,5 +1,5 @@
 import { AuthStatus, NameSpace } from '../../const';
-import { mockAuthData, mockUserData } from '../../utils/mock';
+import { makeMockAuthData, makeMockUserData } from '../../utils/mocks';
 import { checkAuthAction, loginAction, logoutAction } from '../api-actions';
 import { AppState } from '../store.types';
 import { userSlice } from './user.slice';
@@ -25,9 +25,9 @@ describe('User Slice', () => {
 
   it('should set "Auth" and userData with "checkAuthAction.fulfilled" action', () => {
     const initialState: AppState[NameSpace.User] = { authStatus: AuthStatus.NoAuth, userData: null };
-    const expectedState: AppState[NameSpace.User] = { authStatus: AuthStatus.Auth, userData: mockUserData() };
+    const expectedState: AppState[NameSpace.User] = { authStatus: AuthStatus.Auth, userData: makeMockUserData() };
 
-    const result = userSlice.reducer(initialState, checkAuthAction.fulfilled(mockUserData(), '', undefined));
+    const result = userSlice.reducer(initialState, checkAuthAction.fulfilled(makeMockUserData(), '', undefined));
 
     expect(result).toEqual(expectedState);
   });
@@ -43,9 +43,9 @@ describe('User Slice', () => {
 
   it('should set "Auth" and userData with "loginAction.fulfilled" action', () => {
     const initialState: AppState[NameSpace.User] = { authStatus: AuthStatus.NoAuth, userData: null };
-    const expectedState: AppState[NameSpace.User] = { authStatus: AuthStatus.Auth, userData: mockUserData() };
+    const expectedState: AppState[NameSpace.User] = { authStatus: AuthStatus.Auth, userData: makeMockUserData() };
 
-    const result = userSlice.reducer(initialState, loginAction.fulfilled(mockUserData(), '', mockAuthData()));
+    const result = userSlice.reducer(initialState, loginAction.fulfilled(makeMockUserData(), '', makeMockAuthData()));
 
     expect(result).toEqual(expectedState);
   });
@@ -60,7 +60,7 @@ describe('User Slice', () => {
   });
 
   it('should set "NoAuth" and reset UserData, with "logoutAction.fulfilled" action', () => {
-    const initialState: AppState[NameSpace.User] = { authStatus: AuthStatus.Auth, userData: mockUserData() };
+    const initialState: AppState[NameSpace.User] = { authStatus: AuthStatus.Auth, userData: makeMockUserData() };
     const expectedState: AppState[NameSpace.User] = { authStatus: AuthStatus.NoAuth, userData: null };
 
     const result = userSlice.reducer(initialState, logoutAction.fulfilled);

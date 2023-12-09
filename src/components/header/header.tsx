@@ -20,7 +20,7 @@ export function Header(): React.ReactNode {
   };
 
   return (
-    <header className="header">
+    <header className="header" data-testid="headerEl">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
@@ -40,16 +40,22 @@ export function Header(): React.ReactNode {
                   {isAuthorized ? (
                     <>
                       <span className="header__user-name user__name">{userData?.email}</span>
-                      {favsCount ? <span className="header__favorite-count">{favsCount}</span> : null}
+                      {favsCount ? (
+                        <span className="header__favorite-count" data-testid="headerFavsCountEl">
+                          {favsCount}
+                        </span>
+                      ) : null}
                     </>
                   ) : (
-                    <span className="header__login">Sign in</span>
+                    <span className="header__login" data-testid="headerSignInEl">
+                      Sign in
+                    </span>
                   )}
                 </NavLink>
               </li>
 
               {isAuthorized && (
-                <li className="header__nav-item">
+                <li className="header__nav-item" data-testid="headerSignOutEl">
                   <a className="header__nav-link" href="#" onClick={handleLogoutClick}>
                     <span className="header__signout">Sign out</span>
                   </a>

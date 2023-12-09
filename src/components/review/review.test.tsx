@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Review from './review';
-import { makeMockReview } from '../../utils/mock';
+import { makeMockReview } from '../../utils/mocks';
 import { formatDateForReview } from '../../utils/utils';
 
 describe('Component: Review', () => {
