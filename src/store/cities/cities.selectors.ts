@@ -1,3 +1,4 @@
+import { createSelector } from '@reduxjs/toolkit';
 import { SortOptions } from '../../components/offers-sorting/offers-sorting.types';
 import { TPlaceCard } from '../../components/place-card/place-card.types';
 import { CityName, NameSpace } from '../../const';
@@ -11,26 +12,32 @@ const offersSortFunctions = {
 };
 
 export const getError = (state: AppState): string | null => state[NameSpace.Cities].error;
-export const selectCityOffers = (
-  state: AppState,
-  cityName: CityName,
-  option: SortOptions = SortOptions.Popular
-): Array<TPlaceCard> | null => {
-  const offers = state[NameSpace.Data].offersList;
 
-  if (!offers) {
-    return null;
+export const selectOffersByCityAndSort = createSelector(
+  [
+    (state: AppState, cityName: CityName, option: SortOptions) => ({
+      offers: state[NameSpace.Data].offersList,
+      cityName,
+      option,
+    }),
+  ],
+  (values) => {
+    const { offers, cityName, option } = values;
+
+    if (!offers) {
+      return null;
+    }
+
+    let newOffers = offers;
+
+    if (cityName) {
+      newOffers = newOffers.filter((offer) => offer.city.name === cityName);
+    }
+
+    if (option && offersSortFunctions[option]) {
+      newOffers = offersSortFunctions[option](offers);
+    }
+
+    return newOffers;
   }
-
-  let newCityOffers = offers;
-
-  if (cityName) {
-    newCityOffers = newCityOffers.filter((offer) => offer.city.name === cityName);
-  }
-
-  if (option && offersSortFunctions[option]) {
-    newCityOffers = offersSortFunctions[option](newCityOffers);
-  }
-
-  return newCityOffers;
-};
+);
