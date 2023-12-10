@@ -7,7 +7,7 @@ import { APIRoute, ReviewTextLength, STARS } from '../../const';
 
 type YourReviewFormProps = {
   offerId: TPlaceCard['id'];
-  onSubmitSuccess: (reviews: Array<TReview>) => void;
+  onSubmitSuccess: () => void;
 };
 
 export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewFormProps): React.ReactNode {
@@ -36,9 +36,9 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
     setIsFormPending(true);
     api
       .post<Array<TReview>>(`${APIRoute.Comments}/${offerId}`, requestData)
-      .then(({ data }) => {
+      .then(() => {
         setFormData(initialFormData);
-        onSubmitSuccess(data);
+        onSubmitSuccess();
       })
       .finally(() => setIsFormPending(false));
   };

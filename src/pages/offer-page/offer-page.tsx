@@ -7,7 +7,7 @@ import YourReviewForm from '../../components/your-review-form/your-review-form';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
 import Map from '../../components/map/map';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { api } from '../../store/store';
 import Preloader from '../../components/preloader/preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
@@ -105,27 +105,32 @@ function OfferHost({
 function OfferReviews({ offerId }: { offerId: TPlaceCard['id'] }): ReactNode {
   const isAuthorized = useAppSelector(getIsAuthorized);
   const [allReviews, setAllReviews] = useState<Array<TReview>>();
+  const isMounted = useRef(false);
 
-  const handleReviewSubmitSuccess = (reviews: Array<TReview>) => {
-    setAllReviews(reviews);
-  };
-
-  useEffect(() => {
-    let isMounted = true;
-
+  const fetchComments = useCallback(() => {
     api
       .get<Array<TReview>>(`${APIRoute.Comments}/${offerId}`)
       .catch(() => ({ data: [] }))
       .then(({ data }) => {
-        if (isMounted) {
+        if (isMounted.current) {
           setAllReviews(data);
         }
       });
+  }, [offerId]);
+
+  const handleReviewSubmitSuccess = () => {
+    fetchComments();
+  };
+
+  useEffect(() => {
+    isMounted.current = true;
+
+    fetchComments();
 
     return () => {
-      isMounted = false;
+      isMounted.current = false;
     };
-  }, [offerId]);
+  }, [offerId, fetchComments]);
 
   return (
     <section className="offer__reviews reviews">
