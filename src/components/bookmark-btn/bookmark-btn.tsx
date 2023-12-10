@@ -39,21 +39,21 @@ export default function BookmarkBtn({
   function handleClick() {
     if (!isAuthorized) {
       dispatch(redirectToRouteAction(AppRoute.Login));
+    } else {
+      const newStatus = !isFav;
+      api
+        .post<TPlaceCard>(`${APIRoute.Favorite}/${offerId}/${Number(newStatus)}`)
+        .then(({ data }) => {
+          setIsFav(data.isFavorite);
+
+          if (!data.isFavorite && onBookmarkDelete) {
+            onBookmarkDelete();
+          }
+
+          dispatch(updateFavoritesIds({ id: offerId, appendRemoveFlag: data.isFavorite }));
+        })
+        .catch(() => dispatch(redirectToRouteAction(AppRoute.Login)));
     }
-
-    const newStatus = !isFav;
-    api
-      .post<TPlaceCard>(`${APIRoute.Favorite}/${offerId}/${Number(newStatus)}`)
-      .then(({ data }) => {
-        setIsFav(data.isFavorite);
-
-        if (!data.isFavorite && onBookmarkDelete) {
-          onBookmarkDelete();
-        }
-
-        dispatch(updateFavoritesIds({ id: offerId, appendRemoveFlag: data.isFavorite }));
-      })
-      .catch(() => dispatch(redirectToRouteAction(AppRoute.Login)));
   }
 
   return (
