@@ -8,6 +8,7 @@ import { createAPI } from '../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import { MockStoreEnhanced, configureMockStore } from '@jedmao/redux-mock-store';
 import thunk from 'redux-thunk';
+import { redirect } from '../store/middlewares/redirect';
 
 export const makeMockOffer = (id?: TPlaceCard['id']): TPlaceCard => ({
   city: {
@@ -113,7 +114,7 @@ export const makeMockStore = (
 } => {
   const axios = createAPI();
   const mockAxiosAdapter = new MockAdapter(axios);
-  const middleware = [thunk.withExtraArgument(axios)];
+  const middleware = [thunk.withExtraArgument(axios), redirect];
   const mockStoreCreator = configureMockStore<AppState, Action<string>, AppThunkDispatch>(middleware);
   const mockStore = mockStoreCreator(makeMockState(state));
 

@@ -74,6 +74,7 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
               value={count}
               checked={count === formData.rating}
               onChange={handleRatingFieldChange}
+              data-testid="yourReviewRatingEl"
             />
             <label htmlFor={`${count}-stars`} className="reviews__rating-label form__rating-label" title={title}>
               <svg className="form__star-image" width={37} height={33}>
@@ -91,6 +92,7 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formData.review}
         onChange={handleCommentFieldChange}
+        data-testid="yourReviewTextEl"
       />
 
       <div className="reviews__button-wrapper">
@@ -98,7 +100,12 @@ export default function YourReviewForm({ offerId, onSubmitSuccess }: YourReviewF
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
           with at least <b className="reviews__text-amount">{ReviewTextLength.Min} characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={!isFormValid}>
+        <button
+          className="reviews__submit form__submit button"
+          type="submit"
+          disabled={!isFormValid}
+          data-testid="yourReviewBtnEl"
+        >
           Submit
         </button>
       </div>

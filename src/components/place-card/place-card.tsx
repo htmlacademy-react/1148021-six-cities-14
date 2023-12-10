@@ -27,6 +27,7 @@ export default function PlaceCard({ card, section, onCardHover, onCardDelete }: 
   };
 
   const handleBookmarkDelete = () => {
+    console.log('del');
     onCardDelete?.(card.id);
   };
 
@@ -39,12 +40,15 @@ export default function PlaceCard({ card, section, onCardHover, onCardDelete }: 
       data-testid="placeCardEl"
     >
       {card.isPremium && (
-        <div className="place-card__mark">
+        <div className="place-card__mark" data-testid="placeCardPremiumEl">
           <span>Premium</span>
         </div>
       )}
       {card.previewImage && (
-        <div className={classNames(`${section}__image-wrapper`, 'place-card__image-wrapper')}>
+        <div
+          className={classNames(`${section}__image-wrapper`, 'place-card__image-wrapper')}
+          data-testid="placeCardImageEl"
+        >
           <Link to={`${AppRoute.Offer}/${card.id}`}>
             <img className="place-card__image" src={card.previewImage} {...sizes[section]} alt="Place image" />
           </Link>
@@ -56,7 +60,7 @@ export default function PlaceCard({ card, section, onCardHover, onCardDelete }: 
             <b className="place-card__price-value">€{card.price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <BookmarkBtn offerId={card.id} {...(onCardDelete ? { onBookmarkDelete: handleBookmarkDelete } : {})} />
+          <BookmarkBtn offerId={card.id} onBookmarkDelete={onCardDelete && handleBookmarkDelete} />
         </div>
         <StarsRating rating={card.rating} cssPrefix="place-card" />
         <h2 className="place-card__name">

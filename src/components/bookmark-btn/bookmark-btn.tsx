@@ -36,12 +36,6 @@ export default function BookmarkBtn({
     setIsFav(favsIds.includes(offerId));
   }, [offerId, favsIds]);
 
-  useEffect(() => {
-    if (!isAuthorized && onBookmarkDelete) {
-      onBookmarkDelete();
-    }
-  }, [isAuthorized, onBookmarkDelete]);
-
   function handleClick() {
     if (!isAuthorized) {
       dispatch(redirectToRouteAction(AppRoute.Login));
@@ -71,6 +65,7 @@ export default function BookmarkBtn({
       )}
       type="button"
       onClick={handleClick}
+      data-testid="bookmarkEl"
     >
       <svg className={`${section}__bookmark-icon`} {...sizes[size]}>
         <use xlinkHref="#icon-bookmark" />
