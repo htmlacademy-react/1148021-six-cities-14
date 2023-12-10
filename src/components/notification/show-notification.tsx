@@ -1,12 +1,13 @@
-import ReactDOM from 'react-dom';
 import { Notification } from './notification';
 import { TIMEOUT_SHOW_ERROR } from '../../const';
+import { createRoot } from 'react-dom/client';
 
 export const showNotification = (error: string) => {
   const container = document.createElement('div');
   document.body.appendChild(container);
 
-  ReactDOM.render(<Notification error={error} />, container);
+  const root = createRoot(container);
+  root.render(<Notification error={error} />);
 
   setTimeout(() => {
     document.body.removeChild(container);

@@ -2,14 +2,7 @@ import { Header } from '../../components/header/header';
 import PlaceCard from '../../components/place-card/place-card';
 import Review from '../../components/review/review';
 import { Helmet } from 'react-helmet-async';
-import {
-  AppRoute,
-  APP_TITLE,
-  APIRoute,
-  ApartmentType,
-  MAX_OFFER_PHOTOS_COUNT,
-  MAX_OFFER_NEARBIES_COUNT,
-} from '../../const';
+import { AppRoute, APP_TITLE, APIRoute, MAX_OFFER_PHOTOS_COUNT, MAX_OFFER_NEARBIES_COUNT } from '../../const';
 import YourReviewForm from '../../components/your-review-form/your-review-form';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
@@ -24,7 +17,7 @@ import BookmarkBtn from '../../components/bookmark-btn/bookmark-btn';
 import { TPlaceCard } from '../../components/place-card/place-card.types';
 import { TReview } from '../../components/review/review.types';
 import { TPoint } from '../../components/map/map.types';
-import { getCountWithPluralizedWord, processReviewsForOfferPage } from '../../utils/utils';
+import { capitalizeFirst, getCountWithPluralizedWord, processReviewsForOfferPage } from '../../utils/utils';
 import classNames from 'classnames';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
@@ -44,7 +37,7 @@ function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
 function OfferFeatures({ offer }: { offer: TPlaceCard }): ReactNode {
   return (
     <ul className="offer__features">
-      <li className="offer__feature offer__feature--entire">{ApartmentType[offer.type]}</li>
+      <li className="offer__feature offer__feature--entire">{capitalizeFirst(offer.type)}</li>
       <li className="offer__feature offer__feature--bedrooms">
         {getCountWithPluralizedWord('Bedroom', offer.bedrooms)}
       </li>

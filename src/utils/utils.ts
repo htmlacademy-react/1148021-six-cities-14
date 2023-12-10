@@ -25,3 +25,5 @@ export const formatDateForReview = (date: string) =>
     year: 'numeric',
     month: 'long',
   });
+
+export const capitalizeFirst = (word: string): string => word.charAt(0).toUpperCase() + word.slice(1);

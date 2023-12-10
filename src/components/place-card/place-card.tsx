@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { ApartmentType, AppRoute } from '../../const';
+import { AppRoute } from '../../const';
 import StarsRating from '../stars-rating/stars-rating';
 import BookmarkBtn from '../bookmark-btn/bookmark-btn';
 import { TPlaceCard } from './place-card.types';
+import { capitalizeFirst } from '../../utils/utils';
 
 type TPlaceCardProps = {
   card: TPlaceCard;
@@ -27,7 +28,6 @@ export default function PlaceCard({ card, section, onCardHover, onCardDelete }: 
   };
 
   const handleBookmarkDelete = () => {
-    console.log('del');
     onCardDelete?.(card.id);
   };
 
@@ -66,7 +66,7 @@ export default function PlaceCard({ card, section, onCardHover, onCardDelete }: 
         <h2 className="place-card__name">
           <Link to={`${AppRoute.Offer}/${card.id}`}>{card.title}</Link>
         </h2>
-        <p className="place-card__type">{ApartmentType[card.type]}</p>
+        <p className="place-card__type">{capitalizeFirst(card.type)}</p>
       </div>
     </article>
   );
