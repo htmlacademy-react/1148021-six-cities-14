@@ -1,3 +1,4 @@
+import { formatDateForReview } from '../../utils/utils';
 import StarsRating from '../stars-rating/stars-rating';
 import { TReview } from './review.types';
 
@@ -7,7 +8,7 @@ type TReviewProps = {
 
 export default function Review({ review }: TReviewProps): React.ReactNode {
   return (
-    <li className="reviews__item">
+    <li className="reviews__item" data-testid="reviewEl">
       <div className="reviews__user user">
         <div className="reviews__avatar-wrapper user__avatar-wrapper">
           <img
@@ -24,10 +25,7 @@ export default function Review({ review }: TReviewProps): React.ReactNode {
         <StarsRating rating={review.rating} cssPrefix="reviews" />
         <p className="reviews__text">{review.comment}</p>
         <time className="reviews__time" dateTime={review.date}>
-          {new Date(review.date).toLocaleDateString('en-us', {
-            year: 'numeric',
-            month: 'long',
-          })}
+          {formatDateForReview(review.date)}
         </time>
       </div>
     </li>

@@ -19,3 +19,11 @@ export const getRandomCity = () => {
 export const pluralize = (word: string, count: number) => (count > 1 ? `${word}s` : word);
 
 export const getCountWithPluralizedWord = (word: string, count: number) => `${count} ${pluralize(word, count)}`;
+
+export const formatDateForReview = (date: string) =>
+  new Date(date).toLocaleDateString('en-us', {
+    year: 'numeric',
+    month: 'long',
+  });
+
+export const capitalizeFirst = (word: string): string => word.charAt(0).toUpperCase() + word.slice(1);

@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import PlaceCard from '../place-card/place-card';
 import Map from '../map/map';
 import OffersSorting from '../offers-sorting/offers-sorting';
-import { useAppDispatch } from '../../hooks/hooks';
-import { updateCityOffers } from '../../store/cities/cities.slice';
-import { SortOptions } from '../offers-sorting/offers-sorting.types';
-import { CityName } from '../../const';
 import { TPlaceCard } from '../place-card/place-card.types';
 import { getCountWithPluralizedWord } from '../../utils/utils';
 
@@ -17,14 +13,9 @@ type TOffersListProps = {
 export default function OffersList({ offers, city: cityName }: TOffersListProps): React.ReactNode {
   const city = offers[0].city;
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
-  const dispatch = useAppDispatch();
 
   const handleCardHover = (id: TPlaceCard['id'] | null) => {
     setActiveCardId(id);
-  };
-
-  const handleSortClick = (option: string) => {
-    dispatch(updateCityOffers({ offers, cityName: cityName as CityName, option: option as SortOptions }));
   };
 
   return (
@@ -34,7 +25,7 @@ export default function OffersList({ offers, city: cityName }: TOffersListProps)
         <b className="places__found">
           {getCountWithPluralizedWord('place', offers.length)} to stay in {cityName}
         </b>
-        <OffersSorting onSortChange={handleSortClick} />
+        <OffersSorting />
         <div className="cities__places-list places__list tabs__content">
           {offers.map((offer) => (
             <PlaceCard key={offer.id} card={offer} section={'cities'} onCardHover={handleCardHover} />

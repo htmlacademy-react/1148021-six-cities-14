@@ -2,7 +2,7 @@ import { Header } from '../../components/header/header';
 import PlaceCard from '../../components/place-card/place-card';
 import Review from '../../components/review/review';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, APP_TITLE, APIRoute, ApartmentType } from '../../const';
+import { AppRoute, APP_TITLE, APIRoute, MAX_OFFER_PHOTOS_COUNT, MAX_OFFER_NEARBIES_COUNT } from '../../const';
 import YourReviewForm from '../../components/your-review-form/your-review-form';
 import StarsRating from '../../components/stars-rating/stars-rating';
 import { Navigate, useParams } from 'react-router-dom';
@@ -17,14 +17,14 @@ import BookmarkBtn from '../../components/bookmark-btn/bookmark-btn';
 import { TPlaceCard } from '../../components/place-card/place-card.types';
 import { TReview } from '../../components/review/review.types';
 import { TPoint } from '../../components/map/map.types';
-import { getCountWithPluralizedWord, processReviewsForOfferPage } from '../../utils/utils';
+import { capitalizeFirst, getCountWithPluralizedWord, processReviewsForOfferPage } from '../../utils/utils';
 import classNames from 'classnames';
 
 function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
   return (
     <div className="offer__gallery-container container">
       <div className="offer__gallery">
-        {images.slice(0, 6).map((image) => (
+        {images.slice(0, MAX_OFFER_PHOTOS_COUNT).map((image) => (
           <div className="offer__image-wrapper" key={image}>
             <img className="offer__image" src={image} alt="Photo studio" />
           </div>
@@ -37,7 +37,7 @@ function OfferImages({ images }: { images: TPlaceCard['images'] }): ReactNode {
 function OfferFeatures({ offer }: { offer: TPlaceCard }): ReactNode {
   return (
     <ul className="offer__features">
-      <li className="offer__feature offer__feature--entire">{ApartmentType[offer.type]}</li>
+      <li className="offer__feature offer__feature--entire">{capitalizeFirst(offer.type)}</li>
       <li className="offer__feature offer__feature--bedrooms">
         {getCountWithPluralizedWord('Bedroom', offer.bedrooms)}
       </li>
@@ -106,8 +106,8 @@ function OfferReviews({ offerId }: { offerId: TPlaceCard['id'] }): ReactNode {
   const isAuthorized = useAppSelector(getIsAuthorized);
   const [allReviews, setAllReviews] = useState<Array<TReview>>();
 
-  const handleReviewSubmitSuccess = (reviews: Array<TReview>) => {
-    setAllReviews(reviews);
+  const handleReviewSubmitSuccess = (review: TReview) => {
+    setAllReviews((oldReviews) => (oldReviews?.length ? [...oldReviews, review] : [review]));
   };
 
   useEffect(() => {
@@ -154,7 +154,7 @@ function OfferNearby({ offersNearby }: { offersNearby?: Array<TPlaceCard> }): Re
       <section className="near-places places">
         <h2 className="near-places__title">Other places in the neighbourhood</h2>
         <div className="near-places__list places__list">
-          {offersNearby.map((card) => (
+          {offersNearby.slice(0, MAX_OFFER_NEARBIES_COUNT).map((card) => (
             <PlaceCard key={card.id} card={card} section="cities" />
           ))}
         </div>
@@ -239,7 +239,7 @@ export default function OfferPage(): ReactNode {
         </div>
       ) : (
         <main className="page__main page__main--offer">
-          <section className="offer">
+          <section className="offer" data-testid="offerEl">
             <OfferImages images={offer.images} />
 
             <div className="offer__container container">
@@ -251,7 +251,7 @@ export default function OfferPage(): ReactNode {
                 )}
                 <div className="offer__name-wrapper">
                   <h1 className="offer__name">{offer.title}</h1>
-                  <BookmarkBtn offerId={offer.id} isFavorite={offer.isFavorite} section="offer" size="big" />
+                  <BookmarkBtn offerId={offer.id} section="offer" size="big" />
                 </div>
                 <StarsRating rating={offer.rating} cssPrefix="offer" showValue />
                 <OfferFeatures offer={offer} />

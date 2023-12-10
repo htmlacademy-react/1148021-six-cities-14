@@ -5,20 +5,26 @@ import { TPlaceCard } from '../../components/place-card/place-card.types';
 
 const initialState: {
   offersList: Array<TPlaceCard> | null;
-  favoritesList: Array<TPlaceCard> | null;
-  favoritesCount: number;
+  favoritesIds: Array<TPlaceCard['id']>;
 } = {
   offersList: null,
-  favoritesList: null,
-  favoritesCount: 0,
+  favoritesIds: [],
 };
 
 export const dataSlice = createSlice({
   name: NameSpace.Data,
   initialState,
   reducers: {
-    incrementFavoritesCount: (state, action: PayloadAction<1 | -1>) => {
-      state.favoritesCount = state.favoritesCount + action.payload;
+    updateOffersList: (state, action: PayloadAction<Array<TPlaceCard>>) => {
+      state.offersList = action.payload;
+    },
+    updateFavoritesIds: (state, action: PayloadAction<{ id: TPlaceCard['id']; appendRemoveFlag: boolean }>) => {
+      const { id, appendRemoveFlag } = action.payload;
+      if (appendRemoveFlag) {
+        state.favoritesIds.push(id);
+      } else {
+        state.favoritesIds = state.favoritesIds.filter((_id) => _id !== id);
+      }
     },
   },
   extraReducers(builder) {
@@ -30,18 +36,15 @@ export const dataSlice = createSlice({
         state.offersList = [];
       })
       .addCase(fetchFavoritesAction.fulfilled, (state, action) => {
-        state.favoritesList = action.payload;
-        state.favoritesCount = action.payload?.length || 0;
+        state.favoritesIds = action.payload.map((offer) => offer.id);
       })
       .addCase(fetchFavoritesAction.rejected, (state) => {
-        state.favoritesList = [];
-        state.favoritesCount = 0;
+        state.favoritesIds = [];
       })
       .addCase(logoutAction.fulfilled, (state) => {
-        state.favoritesList = [];
-        state.favoritesCount = 0;
+        state.favoritesIds = [];
       });
   },
 });
 
-export const { incrementFavoritesCount } = dataSlice.actions;
+export const { updateOffersList, updateFavoritesIds } = dataSlice.actions;

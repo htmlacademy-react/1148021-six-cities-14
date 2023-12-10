@@ -1,9 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { StatusCodes } from 'http-status-codes';
-import { store } from '../store/store';
-import { clearErrorAction } from '../store/api-actions';
 import { getToken } from './token';
-import { setError } from '../store/cities/cities.slice';
+import { showNotification } from '../components/notification/show-notification';
 
 type DetailMessageType = {
   error: string;
@@ -17,14 +15,13 @@ const StatusCodeMapping: Record<number, boolean> = {
 
 const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[response.status];
 const handleError = (message: string) => {
-  store.dispatch(setError(message));
-  store.dispatch(clearErrorAction());
+  showNotification(message);
 };
 
-const BACKEND_URL = 'https://14.react.pages.academy/six-cities';
+const BACKEND_URL = 'https://14.design.pages.academy/six-cities';
 const REQUEST_TIMEOUT = 5000;
 
-export const createAPI = (): AxiosInstance => {
+export function createAPI(): AxiosInstance {
   const api = axios.create({
     baseURL: BACKEND_URL,
     timeout: REQUEST_TIMEOUT,
@@ -53,4 +50,4 @@ export const createAPI = (): AxiosInstance => {
   );
 
   return api;
-};
+}

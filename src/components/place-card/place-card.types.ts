@@ -1,4 +1,4 @@
-import { ApartmentType, CityName } from '../../const';
+import { CityName } from '../../const';
 
 export type TPlaceCard = {
   bedrooms: number;
@@ -16,7 +16,7 @@ export type TPlaceCard = {
   price: number;
   rating: number;
   title: string;
-  type: keyof typeof ApartmentType;
+  type: string;
 };
 
 export type TCity = {

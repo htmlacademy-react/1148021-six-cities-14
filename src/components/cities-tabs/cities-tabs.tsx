@@ -1,13 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
-import { useAppSelector } from '../../hooks/hooks';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { APP_CITIES, SORT_BY_SEARCH_PARAM_NAME } from '../../const';
-import { getCity } from '../../store/cities/cities.selectors';
 import { SortOptions } from '../offers-sorting/offers-sorting.types';
 
 export default function CitiesTabs(): React.ReactNode {
-  const activeCity = useAppSelector(getCity);
+  const { city: activeCity } = useParams();
   const [searchParams] = useSearchParams();
   const sortBy = searchParams.get(SORT_BY_SEARCH_PARAM_NAME) || SortOptions.Popular;
 
@@ -17,7 +15,7 @@ export default function CitiesTabs(): React.ReactNode {
     });
 
   return (
-    <div className="tabs">
+    <div className="tabs" data-testid="citiesTabsEl">
       <section className="locations container">
         <ul className="locations__list tabs__list">
           {APP_CITIES.map((city) => (

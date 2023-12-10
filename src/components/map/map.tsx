@@ -54,5 +54,5 @@ export default function Map({ city, points, selectedPoint, section = 'cities', s
     }
   }, [map, city, points, selectedPoint]);
 
-  return <section className={`${section}__map map`} ref={mapRef} style={style}></section>;
+  return <section className={`${section}__map map`} ref={mapRef} style={style} data-testid="mapEl"></section>;
 }
