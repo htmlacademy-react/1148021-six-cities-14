@@ -65,6 +65,7 @@ function LoginPage(): React.ReactNode {
                   name="email"
                   placeholder="Email"
                   required
+                  data-testid="loginFieldEl"
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
@@ -76,9 +77,10 @@ function LoginPage(): React.ReactNode {
                   name="password"
                   placeholder="Password"
                   required
+                  data-testid="passwordFieldEl"
                 />
               </div>
-              <button className="login__submit form__submit button" type="submit">
+              <button className="login__submit form__submit button" type="submit" data-testid="loginBtnEl">
                 Sign in
               </button>
             </form>

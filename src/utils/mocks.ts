@@ -1,9 +1,13 @@
-import { Action, ThunkDispatch } from '@reduxjs/toolkit';
+import { Action, EmptyObject, ThunkDispatch } from '@reduxjs/toolkit';
 import { TPlaceCard } from '../components/place-card/place-card.types';
 import { TReview } from '../components/review/review.types';
 import { AuthStatus, CityName, NameSpace } from '../const';
 import { AppState, AuthData, UserData } from '../store/store.types';
 import { AxiosInstance } from 'axios';
+import { createAPI } from '../services/api';
+import MockAdapter from 'axios-mock-adapter';
+import { MockStoreEnhanced, configureMockStore } from '@jedmao/redux-mock-store';
+import thunk from 'redux-thunk';
 
 export const makeMockOffer = (id?: TPlaceCard['id']): TPlaceCard => ({
   city: {
@@ -98,3 +102,27 @@ export const makeMockState = (initialState?: Partial<AppState>): AppState => ({
   },
   ...(initialState ?? {}),
 });
+
+export type MockAppStore = MockStoreEnhanced<EmptyObject & AppState, Action<string>, AppThunkDispatch>;
+
+export const makeMockStore = (
+  state: Partial<AppState> = {}
+): {
+  mockStore: MockAppStore;
+  mockAxiosAdapter: MockAdapter;
+} => {
+  const axios = createAPI();
+  const mockAxiosAdapter = new MockAdapter(axios);
+  const middleware = [thunk.withExtraArgument(axios)];
+  const mockStoreCreator = configureMockStore<AppState, Action<string>, AppThunkDispatch>(middleware);
+  const mockStore = mockStoreCreator(makeMockState(state));
+
+  return {
+    mockStore,
+    mockAxiosAdapter,
+  };
+};
+
+export function extractActionsTypes(actions: Array<Action<string>>) {
+  return actions.map((action) => action.type);
+}

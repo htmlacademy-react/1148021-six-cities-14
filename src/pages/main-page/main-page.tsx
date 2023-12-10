@@ -60,7 +60,10 @@ export default function MainPage(): React.ReactNode {
     <div className="page page--gray page--main">
       <Header />
 
-      <main className={classNames('page__main', 'page__main--index', { 'page__main--index-empty': !hasOffersInCity })}>
+      <main
+        className={classNames('page__main', 'page__main--index', { 'page__main--index-empty': !hasOffersInCity })}
+        data-testid="mainEl"
+      >
         <h1 className="visually-hidden">Cities</h1>
         <CitiesTabs />
 

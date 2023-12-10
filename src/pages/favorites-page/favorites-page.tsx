@@ -62,7 +62,7 @@ export default function FavoritesPage(): React.ReactNode {
   }, []);
 
   return (
-    <div className={classNames('page', { 'page--favorites-empty': isFavsEmpty })}>
+    <div className={classNames('page', { 'page--favorites-empty': isFavsEmpty })} data-testid="favoritesPageEl">
       <Helmet>
         <title>{APP_TITLE} - Favorites</title>
       </Helmet>
